@@ -1,4 +1,5 @@
 import { renderSymbols } from '../src/framework.js';
+import './adaptive-demo.js';
 
 ['../src/content.css', '../src/adaptive.css'].forEach(href => {
   const link = document.createElement('link');
