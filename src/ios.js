@@ -47,7 +47,7 @@ export class IOSApp {
   }
 
   init() {
-    renderSymbols(this.root);
+    renderSymbols(document);
     this.bindTabs();
     this.bindNavigation();
     this.bindBars();
@@ -212,6 +212,15 @@ export class IOSApp {
       state.current.style.transition = '';
       if (state.active && state.dx > Math.min(110, innerWidth * .28)) {
         await this.back();
+      } else if (state.active) {
+        const from = state.current.style.transform || 'translate3d(0,0,0)';
+        state.current.style.transform = '';
+        if (!reducedMotion()) {
+          await state.current.animate(
+            [{ transform: from }, { transform: 'translate3d(0,0,0)' }],
+            { duration: 180, easing: 'cubic-bezier(.22,.72,.18,1)' }
+          ).finished.catch(() => {});
+        }
       } else {
         state.current.style.transform = '';
       }
@@ -335,6 +344,10 @@ export class IOSApp {
       this.toggleMenu(trigger.dataset.iosMenuTrigger, trigger);
     });
     document.addEventListener('click', event => {
+      if (event.target.closest('.ios-menu__item')) {
+        this.closeMenus();
+        return;
+      }
       if (!event.target.closest('.ios-menu, [data-ios-menu-trigger]')) this.closeMenus();
     });
   }
@@ -372,7 +385,11 @@ export class IOSApp {
     this.root.querySelectorAll('[data-ios-context-menu]').forEach(target => {
       let timer = null;
       let start = null;
-      const open = (x, y) => this.toggleMenu(target.dataset.iosContextMenu, null, { x, y });
+      let suppressClick = false;
+      const open = (x, y, suppress = false) => {
+        suppressClick = suppress;
+        this.toggleMenu(target.dataset.iosContextMenu, null, { x, y });
+      };
       target.addEventListener('contextmenu', event => {
         event.preventDefault();
         open(event.clientX, event.clientY);
@@ -380,11 +397,17 @@ export class IOSApp {
       target.addEventListener('pointerdown', event => {
         if (event.pointerType === 'mouse') return;
         start = { x: event.clientX, y: event.clientY };
-        timer = setTimeout(() => open(start.x, start.y), 460);
+        timer = setTimeout(() => open(start.x, start.y, true), 460);
       });
       target.addEventListener('pointermove', event => {
         if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 10) clearTimeout(timer);
       });
+      target.addEventListener('click', event => {
+        if (!suppressClick) return;
+        suppressClick = false;
+        event.preventDefault();
+        event.stopPropagation();
+      }, true);
       ['pointerup', 'pointercancel'].forEach(type => target.addEventListener(type, () => clearTimeout(timer)));
     });
   }
