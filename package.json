@@ -1,16 +1,19 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.3.0",
-  "description": "Dependency-free iOS-style design and interaction framework for web apps.",
+  "version": "0.4.0",
+  "description": "HIG-aligned adaptive iOS and iPadOS web design and interaction framework.",
   "type": "module",
   "main": "./src/framework.js",
   "exports": {
     ".": "./src/framework.js",
     "./core": "./src/ios.js",
     "./platform": "./src/platform.js",
+    "./lucide": "./src/lucide.js",
+    "./split-view": "./src/split-view.js",
     "./styles": "./src/framework.css",
     "./content": "./src/content.css",
-    "./adaptive": "./src/adaptive.css"
+    "./adaptive": "./src/adaptive.css",
+    "./refinements": "./src/refinements.css"
   },
   "files": [
     "src",
@@ -18,17 +21,19 @@
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
     "ios",
     "ipados",
+    "human-interface-guidelines",
     "design-system",
     "web-app",
     "gestures",
     "mobile",
-    "adaptive"
+    "adaptive",
+    "lucide"
   ],
   "license": "MIT"
 }
