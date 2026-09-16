@@ -1,4 +1,4 @@
-import '../src/framework.js';
+import './framework/framework.js';
 
 // Keep app-specific behaviour here. Navigation, gestures, menus, sheets,
 // adaptive layout, keyboard behaviour and Lucide rendering are provided by
@@ -25,8 +25,6 @@ function filterLibrary() {
 
 search?.addEventListener('input', filterLibrary);
 
-// The framework clear button updates the field. Listen for a click as well so
-// this starter's example filtering stays in sync immediately.
 document.querySelector('[data-ios-clear]')?.addEventListener('click', () => {
   requestAnimationFrame(filterLibrary);
 });
