@@ -1,0 +1,32 @@
+/* App-specific styles only.
+   The framework owns navigation, typography, spacing, radii, controls, motion,
+   safe areas, adaptive layouts and accessibility. Keep this file for the visual
+   identity and content needs of the app you build from the starter. */
+
+:root {
+  /* Optional app accent. Remove this override to use the framework default. */
+  /* --ios-blue: #007aff; */
+}
+
+.starter-feature-card {
+  overflow: hidden;
+}
+
+.starter-placeholder-media {
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+  margin: -16px -16px 14px;
+  border-radius: var(--ios-container-radius, var(--ios-surface-radius)) var(--ios-container-radius, var(--ios-surface-radius)) 0 0;
+  background: var(--ios-fill-secondary);
+  color: var(--ios-blue);
+}
+
+.starter-placeholder-media .ios-symbol {
+  width: 34px;
+  height: 34px;
+}
+
+.starter-detail-copy {
+  margin-top: 8px;
+}
