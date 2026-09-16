@@ -1,27 +1,34 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Dependency-free iOS-style design and interaction framework for web apps.",
   "type": "module",
-  "main": "./src/ios.js",
+  "main": "./src/framework.js",
   "exports": {
-    ".": "./src/ios.js",
-    "./styles": "./src/framework.css"
+    ".": "./src/framework.js",
+    "./core": "./src/ios.js",
+    "./platform": "./src/platform.js",
+    "./styles": "./src/framework.css",
+    "./content": "./src/content.css",
+    "./adaptive": "./src/adaptive.css"
   },
   "files": [
     "src",
-    "README.md"
+    "README.md",
+    "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check demo/demo.js",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/framework.js && node --check demo/demo.js",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
     "ios",
+    "ipados",
     "design-system",
     "web-app",
     "gestures",
-    "mobile"
+    "mobile",
+    "adaptive"
   ],
   "license": "MIT"
 }
