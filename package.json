@@ -1,7 +1,7 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.1.0",
-  "description": "A reusable iOS-inspired interaction and design foundation for web apps.",
+  "version": "0.2.0",
+  "description": "Dependency-free iOS-style design and interaction framework for web apps.",
   "type": "module",
   "main": "./src/ios.js",
   "exports": {
@@ -14,11 +14,10 @@
   ],
   "scripts": {
     "check": "node --check src/ios.js && node --check demo/demo.js",
-    "serve": "python -m http.server 4173 -d ."
+    "serve": "python -m http.server 4173"
   },
   "keywords": [
     "ios",
-    "pwa",
     "design-system",
     "web-app",
     "gestures",
