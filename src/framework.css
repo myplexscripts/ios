@@ -6,6 +6,7 @@
 @import url('./accessibility.css');
 @import url('./contrast.css');
 @import url('./patterns.css');
+@import url('./charts.css');
 
 /* Apple semantic text metrics at the default content-size category.
    Browsers can still zoom or enlarge text without changing the hierarchy. */
@@ -22,9 +23,8 @@
 .ios-caption-2 { font-size: 11px; line-height: 13px; }
 
 /* Compact large-title navigation.
-   At the top of a screen the large title belongs to the scroll content and the
-   trailing action shares that visual row. After scrolling, the action and compact
-   title move into the top navigation bar. */
+   The compact title always stays in the real top bar. Only the trailing action
+   moves down beside the large title at rest, then returns to the bar on scroll. */
 @media (max-width: 759px), (max-height: 599px) {
   .ios-tab-panel > .ios-navigation-bar {
     position: absolute;
@@ -34,11 +34,15 @@
   }
 
   .ios-tab-panel > .ios-navigation-bar .ios-navigation-bar__row {
+    transform: none;
+  }
+
+  .ios-tab-panel > .ios-navigation-bar .ios-navigation-bar__trailing {
     transform: translateY(48px);
     transition: transform 220ms var(--ios-ease);
   }
 
-  .ios-tab-panel > .ios-navigation-bar.is-scrolled .ios-navigation-bar__row {
+  .ios-tab-panel > .ios-navigation-bar.is-scrolled .ios-navigation-bar__trailing {
     transform: translateY(0);
   }
 
@@ -77,3 +81,11 @@
   justify-content: flex-start;
 }
 .ios-card-scroller .ios-scroll-card__media { flex: 0 0 auto; }
+
+/* Icon-only store actions use a true centred flex box. */
+.ios-app-row__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ios-app-row__action .ios-symbol { margin: 0; }
