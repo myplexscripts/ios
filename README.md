@@ -36,6 +36,8 @@ The same app changes presentation with available space instead of stretching one
 Compact uses iPhone-style patterns:
 
 - floating bottom tab bar
+- large title in scrolling content with the trailing action aligned to the title region
+- compact navigation title after scrolling
 - single-column hierarchy
 - push screens
 - left-edge swipe back
@@ -77,11 +79,11 @@ The framework treats accessibility as structural rather than optional polish.
 - browser text scaling and zoom compatibility
 - readable-width long-form content
 
-Apple recommends at least 4.5:1 contrast for text in normal circumstances and higher contrast for small custom text. Important supporting text in the framework is tuned around that requirement instead of using decorative low-opacity grey everywhere.
+Important supporting text is tuned around accessible contrast requirements instead of using decorative low-opacity grey everywhere.
 
 ## Full component template
 
-The reference demo is intended to be a catalogue, not a sample landing page. It includes working examples of:
+The reference demo is a catalogue, not a sample landing page. It includes working examples of:
 
 ### Typography and content
 
@@ -97,13 +99,14 @@ The reference demo is intended to be a catalogue, not a sample landing page. It 
 - primary, secondary, tertiary, and quaternary emphasis
 - readable article copy
 - lead paragraphs
-- quotes
+- quotes with intentional block spacing
 - metadata
 - links
 - inline code
 - truncation and line clamping
 - key/value information
 - persistent callouts
+- rich section headings with subtitles and trailing actions
 
 ### Cards and collections
 
@@ -120,10 +123,25 @@ The reference demo is intended to be a catalogue, not a sample landing page. It 
 - responsive card grids
 - collection grids
 - horizontal collections
+- Health-style insight and metric cards
+- recommendation/education cards with CTAs and dismiss controls
+- image-led article cards
+- App Store-style editorial hero cards
+- promotional banners
 - media rows
 - avatars
 - status pills
 - content-unavailable states
+
+### Store and catalogue patterns
+
+- horizontally scrolling category chips
+- app/content rows with square artwork
+- title and subtitle hierarchy
+- Get, Open, and download-style trailing actions
+- supporting action notes
+- grouped recommendation list cards
+- editorial sections with disclosure actions
 
 ### Lists and hierarchy
 
@@ -145,7 +163,7 @@ The reference demo is intended to be a catalogue, not a sample landing page. It 
 - validation and error states
 - multiline text views
 - search fields
-- select fields
+- select and picker fields
 - date and time inputs
 - checkboxes
 - radio choices
@@ -178,12 +196,20 @@ The reference demo is intended to be a catalogue, not a sample landing page. It 
 - toolbars
 - push navigation
 - edge-swipe back
-- menus
+- pull-down menus
 - context menus
 - alerts
 - source-aware action sheets
 - draggable sheets
 - popovers
+
+## Menus versus pickers
+
+These are different iOS controls and are intentionally not interchangeable.
+
+A pull-down menu presents commands or closely related actions. The framework draws this as an iOS-style rounded transient material surface.
+
+A picker or native select presents a selected value. On iPhone and iPad, a native HTML select is allowed to use Safari's system picker because that gives the closest platform-native interaction available to a webpage. Apps that need a fully controlled cross-platform presentation can use the framework menu primitives instead.
 
 ## Split views
 
@@ -214,7 +240,7 @@ On compact widths the sidebar and detail appear one at a time. Selecting a row p
 </div>
 ```
 
-The scroller supports touch and trackpad scrolling, scroll snapping, safe page margins, and a visible next-card peek on compact screens.
+The scroller supports touch and trackpad scrolling, scroll snapping, safe page margins, a visible next-card peek on compact screens, and a shared aligned row height.
 
 ## Design rules
 
@@ -232,7 +258,7 @@ The scroller supports touch and trackpad scrolling, scroll snapping, safe page m
 
 ## HIG audit
 
-`HIG_AUDIT.md` records the current mapping between Apple’s Human Interface Guidelines and the framework, including areas that are compact-only, regular-width-only, shared, or native-only.
+`HIG_AUDIT.md` records the current mapping between Apple's Human Interface Guidelines and the framework, including areas that are compact-only, regular-width-only, shared, or native-only.
 
 Primary references:
 
@@ -258,25 +284,27 @@ Resize between phone and regular widths and interact with the examples. The demo
 src/
   framework.css       public CSS entry point
   framework.js        public JavaScript entry point
-  ios.css              shell, controls, navigation, presentations
-  content.css          typography and content containers
-  adaptive.css         collections and compact/regular layouts
-  refinements.css      current colours, spacing, forms, scrollers, mobile split view
-  presentations.css    source-aware transient presentation styling
-  accessibility.css    contrast, focus, forced colours, hit-area guarantees
-  ios.js               navigation, gestures, menus, overlays, fallback symbols
-  platform.js          keyboard, pointer, focus, adaptive input behaviour
-  lucide.js            Lucide icon bridge
-  split-view.js        compact/regular split-view behaviour
-  presentations.js     source-aware action presentation behaviour
+  ios.css             shell, controls, navigation, presentations
+  content.css         typography and content containers
+  adaptive.css        collections and compact/regular layouts
+  refinements.css     current colours, spacing, forms, scrollers, mobile split view
+  patterns.css        rich native content, editorial, insight, store, and menu patterns
+  presentations.css   source-aware transient presentation styling
+  accessibility.css   contrast, focus, forced colours, hit-area guarantees
+  ios.js              navigation, gestures, menus, overlays, fallback symbols
+  platform.js         keyboard, pointer, focus, adaptive input behaviour
+  lucide.js           Lucide icon bridge
+  split-view.js       compact/regular split-view behaviour
+  presentations.js    source-aware action presentation behaviour
 
 demo/
-  index.html            reference app shell
-  demo.js               typography and content gallery
-  adaptive-demo.js      adaptive and data examples
-  full-gallery.js       full reusable component catalogue
+  index.html           reference app shell
+  demo.js              typography and content gallery
+  adaptive-demo.js     adaptive and data examples
+  full-gallery.js      full reusable component catalogue
+  native-patterns.js   Health/App Store-style reusable pattern catalogue
 
-HIG_AUDIT.md            Apple HIG implementation map
+HIG_AUDIT.md           Apple HIG implementation map
 ```
 
 Future apps should start from these primitives and behaviours instead of rebuilding basic iOS interaction and layout rules screen by screen.
