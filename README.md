@@ -1,111 +1,150 @@
 # iOS Web Framework
 
-A small, dependency-free web foundation for apps that should feel at home on iPhone and iPad.
+A small, dependency-free design and interaction foundation for web apps that should feel at home on iPhone and iPad.
 
-It is not a clone of UIKit or SwiftUI. It takes the parts of Apple’s current design language that matter on the web and turns them into reusable CSS classes and lightweight interactions.
+It is not a UIKit or SwiftUI clone. It mirrors the parts of iOS that translate well to the web: hierarchy, typography, semantic colour, content layout, familiar controls, navigation, gestures, modality, safe areas, and accessibility.
 
-## What it covers
+## Use it
 
-### Structure
+No install or build step is required.
 
-- Safe-area aware full-screen app shell
+```html
+<link rel="stylesheet" href="/ios/src/framework.css">
+<script type="module" src="/ios/src/ios.js"></script>
+```
+
+`framework.css` is the single stylesheet entry point. It includes both the core interface components and the content/typography layer.
+
+## What is included
+
+### App structure
+
+- Safe-area aware full-screen shell
 - Independent scroll surfaces
-- Large titles that collapse into compact navigation titles
+- Large and compact navigation titles
 - Floating navigation controls
 - Floating tab bar with optional minimize-on-scroll behaviour
-- Push navigation with back navigation and left-edge swipe back
+- Push navigation and left-edge swipe back
 - Toolbars and grouped bar actions
-- Responsive sizing for iPhone and wider iPad-style layouts
+- iPhone and wider iPad layouts
 
-### Components
+### Typography and content
 
-- Buttons: prominent, tinted, standard, plain, destructive
+The content layer follows Apple’s system text hierarchy rather than inventing a different type scale for every app.
+
+- Extra large titles
+- Large title
+- Title 1, 2, and 3
+- Headline
+- Body
+- Callout
+- Subheadline
+- Footnote
+- Caption and Caption 2
+- Primary, secondary, tertiary, and quaternary text emphasis
+- Accent, success, and destructive semantic text
+- Readable-width long-form content
+- Paragraph and lead styles
+- Metadata rows
+- Eyebrows
+- Quotes
+- Inline links and code
+- Truncation and two/three-line clamping
+- Selectable text and tabular numerals
+
+Example:
+
+```html
+<div class="ios-readable ios-prose">
+  <div class="ios-eyebrow">Guide</div>
+  <h2>Readable content</h2>
+  <p class="ios-lead">A short introduction with slightly more visual emphasis.</p>
+  <p>Regular body copy with an <a href="#">inline link</a>.</p>
+</div>
+```
+
+### Cards and content containers
+
+Cards stay in the content layer. They are not glass navigation surfaces.
+
+- Standard card
+- Elevated card
+- Outlined card
+- Tinted card
+- Accent card
+- Plain card
+- Interactive card
+- Media card
+- Horizontal compact card
+- Card headers, footers, badges, actions, and accessories
+- Responsive card grid
+- Persistent informational callouts
+- Key/value information groups
+
+Example:
+
+```html
+<article class="ios-card ios-card--elevated">
+  <div class="ios-eyebrow">Featured</div>
+  <h3 class="ios-card__title">Card title</h3>
+  <p class="ios-card__body">Supporting content goes here.</p>
+  <div class="ios-card__footer">Updated today</div>
+</article>
+```
+
+### Controls
+
+- Prominent, tinted, standard, plain, and destructive buttons
 - Grouped lists and disclosure rows
 - Switches
 - Segmented controls
 - Sliders
 - Steppers
-- Text fields and search fields
+- Text and search fields
 - Badges
-- Progress bars and activity indicators
+- Progress and activity indicators
 - Page controls
 - Empty states
-- Cards and inline status surfaces
-- Menus and context menus
+- Swipe actions
+
+### Presentations and menus
+
+- Pull-down menus
+- Touch-and-hold context menus
 - Alerts
 - Action sheets
 - Draggable sheets
-- Swipe actions
 
-### Interaction rules
+## Design rules
 
-- Minimum 44px hit targets for interactive controls
-- Tap feedback for custom buttons
-- Standard tap, swipe, drag, edge-swipe, and touch-and-hold patterns
-- Swipe actions preserve vertical scrolling
-- Context menu actions are also expected to exist elsewhere in the interface
-- Reduced Motion, Reduced Transparency, increased contrast, light mode, and dark mode are respected
-- Each tab retains its own scroll position
-- Pushed screens begin at the top while the previous screen keeps its position
+1. Content is the main layer. Glass belongs primarily to navigation and controls.
+2. Use semantic colours instead of hard-coded greys.
+3. Use the system text hierarchy before inventing a new size.
+4. Long-form text uses a readable width instead of stretching across a large display.
+5. Cards group related content. Do not make every section a card.
+6. Tab bars are navigation, not a place for screen-specific actions.
+7. Keep interactive targets at least 44px.
+8. Preserve context. Tabs retain scroll position and pushed screens open at the top.
+9. Familiar gestures should behave predictably.
+10. Reduced Motion, Reduced Transparency, contrast, light/dark appearance, and safe areas are part of the base system.
 
-## Current Apple design direction
-
-The framework follows the current Human Interface Guidelines rather than older flat iOS styling.
-
-The important rules are:
-
-1. **Content is the main layer.** Glass is reserved for controls and navigation rather than used as decoration across the content layer.
-2. **Bars float above content.** Navigation buttons, toolbars, and tab bars use grouped translucent surfaces instead of heavy bar backgrounds and borders.
-3. **Hierarchy comes from layout and grouping.** Related symbol actions can share a glass group. Text actions and primary actions remain visually distinct.
-4. **Tab bars are navigation only.** Screen-specific actions belong with the content or in a toolbar.
-5. **Use familiar gestures.** Tap activates, swipe reveals actions or navigates, drag directly manipulates, and touch-and-hold can reveal a context menu.
-6. **Keep modal experiences scoped.** Sheets handle focused tasks, alerts handle important actionable information, and action sheets offer choices related to an action the person just initiated.
-7. **Accessibility is part of the base system.** Controls remain large enough to tap and the visual system adapts to the user’s display preferences.
-
-Primary references:
-
-- Apple Human Interface Guidelines: https://developer.apple.com/design/human-interface-guidelines/
-- Apple Design Resources: https://developer.apple.com/design/resources/
-- Liquid Glass: https://developer.apple.com/documentation/technologyoverviews/liquid-glass
-- WWDC: Get to know the new design system: https://developer.apple.com/videos/play/wwdc2025/356/
-
-## Use it
-
-No package install is required.
-
-```html
-<link rel="stylesheet" href="/ios/src/ios.css">
-<script type="module" src="/ios/src/ios.js"></script>
-```
-
-Then create an app root:
+## Basic app shell
 
 ```html
 <main class="ios-app" data-ios-app>
-  <!-- panels, screens, and tab bar -->
+  <section class="ios-tab-panel" data-ios-tab-panel="home">
+    <div class="ios-scroll">
+      <div class="ios-content">
+        <h1 class="ios-large-title">Home</h1>
+      </div>
+    </div>
+  </section>
 </main>
 ```
 
-The framework auto-initializes every `data-ios-app` root.
+The JavaScript auto-initializes every `data-ios-app` root.
 
-## Basic tab bar
-
-```html
-<section class="ios-tab-panel" data-ios-tab-panel="home">
-  <div class="ios-scroll">...</div>
-</section>
-
-<section class="ios-tab-panel" data-ios-tab-panel="settings" hidden>
-  <div class="ios-scroll">...</div>
-</section>
-
-<nav class="ios-tabbar">
-  <button class="ios-tabbar__item" data-ios-tab="home" aria-selected="true">Home</button>
-  <button class="ios-tabbar__item" data-ios-tab="settings" aria-selected="false">Settings</button>
-</nav>
-```
-
-## Push navigation
+## Navigation
 
 ```html
 <button class="ios-row" data-ios-push="detail">Open detail</button>
@@ -116,11 +155,9 @@ The framework auto-initializes every `data-ios-app` root.
 </section>
 ```
 
-Push navigation supports the standard left-edge swipe-back gesture on touch devices.
+Push navigation supports left-edge swipe back on touch devices.
 
-## Sheets, alerts, and action sheets
-
-Anything with `data-ios-present="name"` can present the matching overlay.
+## Presentations
 
 ```html
 <button data-ios-present="edit-sheet">Edit</button>
@@ -129,33 +166,13 @@ Anything with `data-ios-present="name"` can present the matching overlay.
   <section class="ios-sheet">
     <div class="ios-sheet__grabber" data-ios-sheet-handle></div>
     <button data-ios-dismiss>Cancel</button>
-    ...
   </section>
 </div>
 ```
 
-Use `data-ios-dismiss` on controls that close a presentation.
-
-## Menus
-
-```html
-<button data-ios-menu-trigger="more">More</button>
-
-<div class="ios-menu" data-ios-menu="more" hidden>
-  <button class="ios-menu__item">Share</button>
-  <button class="ios-menu__item ios-menu__item--destructive">Delete</button>
-</div>
-```
-
-For a touch-and-hold or secondary-click context menu:
-
-```html
-<div data-ios-context-menu="more">...</div>
-```
-
 ## Symbols
 
-The framework includes a small neutral web symbol set for common interface actions. It does not depend on a CDN or icon package.
+A small built-in neutral SVG symbol set covers common interface actions without a CDN or icon dependency.
 
 ```html
 <span data-ios-symbol="search"></span>
@@ -163,11 +180,9 @@ The framework includes a small neutral web symbol set for common interface actio
 <span data-ios-symbol="chevronRight"></span>
 ```
 
-The symbol renderer is intentionally small. An app can replace these with its own icon system while keeping the framework’s sizing and placement classes.
+Apps can replace the symbol set while retaining the framework’s sizing and layout classes.
 
 ## Demo
-
-The demo is a working component and interaction gallery.
 
 From the repository root:
 
@@ -175,24 +190,22 @@ From the repository root:
 python -m http.server 4173
 ```
 
-Open:
+Open `http://localhost:4173/demo/`.
 
-```text
-http://localhost:4173/demo/
-```
-
-It has no network or API dependency.
+The demo is the component gallery and interaction reference. It includes typography, body copy, cards, controls, lists, navigation, gestures, menus, sheets, alerts, and other supported patterns.
 
 ## Files
 
 ```text
 src/
-  ios.css      visual system and components
-  ios.js       interaction behaviour and built-in symbols
+  framework.css  single CSS entry point
+  ios.css        app shell, controls, navigation, presentations
+  content.css    typography, readable copy, cards, content containers
+  ios.js         interaction behaviour and built-in symbols
 
 demo/
-  index.html   working reference app
-  demo.js      demo-only behaviour
+  index.html     working reference app
+  demo.js        demo content and small demo-only behaviour
 ```
 
-The rule for future apps is simple: use the framework for platform behaviour and consistency, then put the app’s own content and branding inside it. Do not restyle every screen independently.
+The goal is simple: future apps should start from these pieces instead of recreating basic iOS behaviour and content styling every time.
