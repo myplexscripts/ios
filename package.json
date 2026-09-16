@@ -1,6 +1,6 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "HIG-aligned adaptive iOS and iPadOS web design and interaction framework.",
   "type": "module",
   "main": "./src/framework.js",
@@ -18,6 +18,7 @@
     "./refinements": "./src/refinements.css",
     "./patterns": "./src/patterns.css",
     "./charts": "./src/charts.css",
+    "./radii": "./src/radii.css",
     "./accessibility": "./src/accessibility.css",
     "./contrast": "./src/contrast.css"
   },
