@@ -6,7 +6,7 @@
   "main": "./src/ios.js",
   "exports": {
     ".": "./src/ios.js",
-    "./styles": "./src/ios.css"
+    "./styles": "./src/framework.css"
   },
   "files": [
     "src",
