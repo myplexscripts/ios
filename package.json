@@ -15,7 +15,8 @@
     "./content": "./src/content.css",
     "./adaptive": "./src/adaptive.css",
     "./refinements": "./src/refinements.css",
-    "./accessibility": "./src/accessibility.css"
+    "./accessibility": "./src/accessibility.css",
+    "./contrast": "./src/contrast.css"
   },
   "files": [
     "src",
@@ -23,7 +24,7 @@
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node tools/contrast-check.mjs",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
