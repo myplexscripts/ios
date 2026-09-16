@@ -1,6 +1,6 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "HIG-aligned adaptive iOS and iPadOS web design and interaction framework.",
   "type": "module",
   "main": "./src/framework.js",
@@ -11,11 +11,13 @@
     "./lucide": "./src/lucide.js",
     "./split-view": "./src/split-view.js",
     "./presentations": "./src/presentations.js",
+    "./behavior": "./src/behavior.js",
     "./styles": "./src/framework.css",
     "./content": "./src/content.css",
     "./adaptive": "./src/adaptive.css",
     "./refinements": "./src/refinements.css",
     "./patterns": "./src/patterns.css",
+    "./charts": "./src/charts.css",
     "./accessibility": "./src/accessibility.css",
     "./contrast": "./src/contrast.css"
   },
@@ -25,7 +27,7 @@
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node tools/contrast-check.mjs",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/behavior.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node --check demo/charts.js && node tools/contrast-check.mjs",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
