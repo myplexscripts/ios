@@ -8,11 +8,12 @@ function positionActionSheet(overlay, trigger) {
   const margin = 12;
   const width = Math.min(420, innerWidth - margin * 2);
   const sourceMid = source.left + source.width / 2;
+  const left = clamp(sourceMid - width / 2, margin, innerWidth - width - margin);
 
   overlay.dataset.iosActionAnchored = 'true';
-  overlay.style.setProperty('--ios-action-left', `${clamp(sourceMid - width / 2, margin, innerWidth - width - margin)}px`);
+  overlay.style.setProperty('--ios-action-left', `${left}px`);
   overlay.style.setProperty('--ios-action-top', `${Math.min(source.bottom + 8, innerHeight - margin)}px`);
-  overlay.style.setProperty('--ios-action-source-x', `${sourceMid}px`);
+  overlay.style.setProperty('--ios-action-source-x', `${clamp(sourceMid - left, 18, width - 18)}px`);
 
   requestAnimationFrame(() => {
     const rect = sheet.getBoundingClientRect();
