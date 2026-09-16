@@ -1,7 +1,7 @@
 {
   "name": "@myplexscripts/ios-web",
-  "version": "0.5.2",
-  "description": "HIG-aligned adaptive iOS and iPadOS web design and interaction framework.",
+  "version": "0.6.0",
+  "description": "HIG-aligned adaptive iOS and iPadOS web design, interaction framework, and reusable starter template.",
   "type": "module",
   "main": "./src/framework.js",
   "exports": {
@@ -24,11 +24,12 @@
   },
   "files": [
     "src",
+    "starter",
     "README.md",
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/behavior.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node --check demo/charts.js && node tools/contrast-check.mjs",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/behavior.js && node --check src/framework.js && node --check starter/app.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node --check demo/charts.js && node tools/contrast-check.mjs",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
@@ -37,6 +38,7 @@
     "human-interface-guidelines",
     "design-system",
     "web-app",
+    "starter-template",
     "gestures",
     "mobile",
     "adaptive",
