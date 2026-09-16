@@ -4,6 +4,7 @@
 @import url('./refinements.css');
 @import url('./presentations.css');
 @import url('./accessibility.css');
+@import url('./contrast.css');
 
 /* Apple semantic text metrics at the default content-size category.
    Browsers can still zoom or enlarge text without changing the hierarchy. */
