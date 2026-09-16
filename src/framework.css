@@ -7,6 +7,7 @@
 @import url('./contrast.css');
 @import url('./patterns.css');
 @import url('./charts.css');
+@import url('./radii.css');
 
 /* Apple semantic text metrics at the default content-size category.
    Browsers can still zoom or enlarge text without changing the hierarchy. */
