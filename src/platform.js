@@ -25,6 +25,8 @@ function bindEnvironment(root) {
 
 function bindTabKeyboard(root) {
   root.querySelectorAll('.ios-tabbar').forEach(tabbar => {
+    if (tabbar.dataset.iosKeyboardBound) return;
+    tabbar.dataset.iosKeyboardBound = 'true';
     tabbar.setAttribute('role', 'tablist');
     tabbar.addEventListener('keydown', event => {
       const current = event.target.closest('[data-ios-tab]');
@@ -89,7 +91,7 @@ function bindMenuKeyboard(root) {
   });
 }
 
-function bindModalFocus(root) {
+function bindModalFocus() {
   document.addEventListener('keydown', event => {
     if (event.key !== 'Tab') return;
     const overlay = document.querySelector('.ios-overlay.is-open:not([hidden])');
@@ -114,8 +116,15 @@ function bindModalFocus(root) {
 
 function bindSelectionLists(root) {
   root.querySelectorAll('[data-ios-select-list]').forEach(list => {
+    if (list.dataset.iosSelectionBound) return;
+    list.dataset.iosSelectionBound = 'true';
     const rows = () => [...list.querySelectorAll('[data-ios-select-row]')];
     list.setAttribute('role', list.getAttribute('role') || 'listbox');
+
+    rows().forEach(row => {
+      row.setAttribute('role', row.getAttribute('role') || 'option');
+      if (!row.hasAttribute('tabindex')) row.tabIndex = 0;
+    });
 
     const select = row => {
       const multiple = list.hasAttribute('data-ios-multiple');
@@ -152,6 +161,8 @@ function bindSelectionLists(root) {
 }
 
 function bindSettingsShortcut(root) {
+  if (root.dataset.iosSettingsShortcutBound) return;
+  root.dataset.iosSettingsShortcutBound = 'true';
   document.addEventListener('keydown', event => {
     if (!(event.metaKey || event.ctrlKey) || event.key !== ',') return;
     const settings = root.querySelector('[data-ios-tab="settings"]');
@@ -164,6 +175,8 @@ function bindSettingsShortcut(root) {
 
 function bindPageControls(root) {
   root.querySelectorAll('[data-ios-page-control]').forEach(control => {
+    if (control.dataset.iosPageBound) return;
+    control.dataset.iosPageBound = 'true';
     const pages = [...control.querySelectorAll('[data-ios-page]')];
     if (!pages.length) return;
     pages.forEach((page, index) => {
@@ -199,15 +212,36 @@ function bindPageControls(root) {
 }
 
 export function initIOSPlatform(root = document.querySelector('[data-ios-app]')) {
-  if (!root || root.__iosPlatform) return root?.__iosPlatform;
+  if (!root) return null;
+  if (root.__iosPlatform) {
+    root.__iosPlatform.refresh();
+    return root.__iosPlatform;
+  }
+
   bindEnvironment(root);
   bindTabKeyboard(root);
   bindMenuKeyboard(root);
-  bindModalFocus(root);
-  bindSelectionLists(root);
+  bindModalFocus();
   bindSettingsShortcut(root);
-  bindPageControls(root);
-  root.__iosPlatform = { sync: () => syncEnvironment(root) };
+
+  const refresh = () => {
+    bindTabKeyboard(root);
+    bindSelectionLists(root);
+    bindPageControls(root);
+  };
+
+  refresh();
+
+  const observer = new MutationObserver(records => {
+    if (records.some(record => record.addedNodes.length || record.removedNodes.length)) refresh();
+  });
+  observer.observe(root, { childList: true, subtree: true });
+
+  root.__iosPlatform = {
+    sync: () => syncEnvironment(root),
+    refresh,
+    disconnect: () => observer.disconnect()
+  };
   return root.__iosPlatform;
 }
 
