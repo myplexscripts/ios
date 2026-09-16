@@ -1,3 +1,17 @@
 @import url('./ios.css');
 @import url('./content.css');
 @import url('./adaptive.css');
+
+/* Apple semantic text metrics at the default content-size category.
+   Browsers can still zoom or enlarge text without changing the hierarchy. */
+.ios-large-title { font-size: 34px; line-height: 41px; }
+.ios-title-1 { font-size: 28px; line-height: 34px; }
+.ios-title-2 { font-size: 22px; line-height: 28px; }
+.ios-title-3 { font-size: 20px; line-height: 25px; }
+.ios-headline { font-size: 17px; line-height: 22px; font-weight: 600; }
+.ios-body { font-size: 17px; line-height: 22px; }
+.ios-callout { font-size: 16px; line-height: 21px; }
+.ios-subheadline { font-size: 15px; line-height: 20px; }
+.ios-footnote { font-size: 13px; line-height: 18px; }
+.ios-caption { font-size: 12px; line-height: 16px; }
+.ios-caption-2 { font-size: 11px; line-height: 13px; }
