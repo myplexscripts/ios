@@ -1,9 +1,11 @@
 import { renderSymbols } from '../src/framework.js';
 
-const contentStyles = document.createElement('link');
-contentStyles.rel = 'stylesheet';
-contentStyles.href = '../src/content.css';
-document.head.append(contentStyles);
+['../src/content.css', '../src/adaptive.css'].forEach(href => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.append(link);
+});
 
 const contentGallery = `
   <section class="ios-section">
