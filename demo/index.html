@@ -1,124 +1,366 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>iOS Web Foundation</title>
+  <title>iOS Web Framework</title>
   <link rel="stylesheet" href="../src/ios.css">
-  <script src="https://unpkg.com/lucide@latest" defer></script>
   <script type="module" src="./demo.js"></script>
 </head>
 <body>
-  <main class="ios-app ios-router" id="app">
-    <section class="ios-screen ios-has-tabbar" data-ios-route="home">
-      <div class="ios-content">
-        <div class="ios-large-title">Foundation</div>
-        <p class="ios-subtitle" style="margin-top:-12px;margin-bottom:24px">Reusable native-feeling building blocks for future web apps.</p>
-
-        <section class="ios-section">
-          <div class="ios-section__header">Navigation</div>
-          <div class="ios-group">
-            <button class="ios-row ios-row--button" data-ios-link="details">
-              <span class="ios-row__icon"><i data-lucide="layers-3"></i></span>
-              <span class="ios-row__body"><span class="ios-row__title">Push navigation</span><span class="ios-row__detail">Try edge-swipe back on iPhone</span></span>
-              <span class="ios-row__chevron"><i data-lucide="chevron-right"></i></span>
-            </button>
-            <button class="ios-row ios-row--button" id="sheetButton">
-              <span class="ios-row__icon" style="background:var(--ios-purple)"><i data-lucide="panel-bottom"></i></span>
-              <span class="ios-row__body"><span class="ios-row__title">Bottom sheet</span><span class="ios-row__detail">Drag the grabber to dismiss</span></span>
-              <span class="ios-row__chevron"><i data-lucide="chevron-right"></i></span>
-            </button>
-            <button class="ios-row ios-row--button" id="actionButton">
-              <span class="ios-row__icon" style="background:var(--ios-orange)"><i data-lucide="ellipsis"></i></span>
-              <span class="ios-row__body"><span class="ios-row__title">Action sheet</span></span>
-              <span class="ios-row__chevron"><i data-lucide="chevron-right"></i></span>
-            </button>
-          </div>
-        </section>
-
-        <section class="ios-section">
-          <div class="ios-section__header">Controls</div>
-          <div class="ios-group">
-            <div class="ios-row">
-              <span class="ios-row__body"><span class="ios-row__title">Notifications</span></span>
-              <label class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></label>
-            </div>
-            <div class="ios-row">
-              <span class="ios-row__body"><span class="ios-row__title">Appearance</span></span>
-              <span class="ios-row__value">Automatic</span>
+  <main class="ios-app" id="demoApp" data-ios-app>
+    <section class="ios-tab-panel" data-ios-tab-panel="components" tabindex="-1">
+      <header class="ios-navigation-bar">
+        <div class="ios-navigation-bar__row">
+          <div class="ios-navigation-bar__leading"></div>
+          <div class="ios-navigation-bar__title">Components</div>
+          <div class="ios-navigation-bar__trailing">
+            <div class="ios-glass-group">
+              <button class="ios-bar-button ios-bar-button--icon" type="button" data-ios-menu-trigger="top-menu" aria-label="More options"><span data-ios-symbol="ellipsis"></span></button>
             </div>
           </div>
-        </section>
+        </div>
+      </header>
+      <div class="ios-scroll" data-ios-tabbar-minimize>
+        <div class="ios-content">
+          <h1 class="ios-large-title">Components</h1>
 
-        <section class="ios-section">
-          <div class="ios-segmented" data-ios-segmented>
-            <button aria-selected="true" value="day">Day</button>
-            <button aria-selected="false" value="week">Week</button>
-            <button aria-selected="false" value="month">Month</button>
-          </div>
-        </section>
+          <section class="ios-section">
+            <label class="ios-search-field">
+              <span data-ios-symbol="search"></span>
+              <input type="search" placeholder="Search components" aria-label="Search components">
+              <button class="ios-search-field__clear" type="button" data-ios-clear aria-label="Clear search"><span data-ios-symbol="xmark"></span></button>
+            </label>
+          </section>
 
-        <section class="ios-section">
-          <div class="ios-section__header">Swipe actions</div>
-          <div class="ios-group">
-            <div class="ios-swipe-row" data-ios-swipe-row>
-              <div class="ios-swipe-row__actions">
-                <button class="ios-swipe-row__action ios-swipe-row__action--secondary">More</button>
-                <button class="ios-swipe-row__action">Delete</button>
+          <section class="ios-section">
+            <div class="ios-section__header">Buttons</div>
+            <div class="ios-card ios-stack">
+              <button class="ios-button ios-button--prominent ios-button--block" type="button">Continue</button>
+              <div class="ios-button-row">
+                <button class="ios-button ios-button--tinted" type="button">Add Item</button>
+                <button class="ios-button" type="button">Secondary</button>
+                <button class="ios-button ios-button--destructive" type="button">Delete</button>
               </div>
-              <div class="ios-swipe-row__content">
-                <div class="ios-row">
-                  <span class="ios-row__body"><span class="ios-row__title">Swipe me left</span><span class="ios-row__detail">Rows behave like native list actions</span></span>
+            </div>
+            <div class="ios-section__footer">Primary actions are visually prominent. Secondary actions stay quieter.</div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Selection</div>
+            <div class="ios-card ios-stack">
+              <div class="ios-segmented" data-ios-segmented aria-label="Time range">
+                <button type="button" data-ios-segment="day" aria-selected="true">Day</button>
+                <button type="button" data-ios-segment="week" aria-selected="false">Week</button>
+                <button type="button" data-ios-segment="month" aria-selected="false">Month</button>
+              </div>
+              <div class="ios-hstack">
+                <span class="ios-body">Amount</span>
+                <span class="ios-spacer"></span>
+                <div class="ios-stepper" data-ios-stepper data-min="0" data-max="10">
+                  <button type="button" data-ios-step="down" aria-label="Decrease"><span data-ios-symbol="minus"></span></button>
+                  <span class="ios-stepper__value" data-ios-stepper-value>3</span>
+                  <button type="button" data-ios-step="up" aria-label="Increase"><span data-ios-symbol="plus"></span></button>
+                </div>
+              </div>
+              <label class="ios-stack" style="gap:6px">
+                <span class="ios-subheadline ios-secondary">Volume</span>
+                <input class="ios-slider" type="range" min="0" max="100" value="62">
+              </label>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Form Controls</div>
+            <div class="ios-list">
+              <label class="ios-row">
+                <span class="ios-row__body"><span class="ios-row__title">Notifications</span></span>
+                <span class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></span>
+              </label>
+              <div class="ios-row">
+                <span class="ios-row__body"><span class="ios-row__title">Name</span></span>
+                <label class="ios-text-field" style="flex:0 1 190px"><input type="text" value="David" aria-label="Name"></label>
+              </div>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Lists</div>
+            <div class="ios-list">
+              <button class="ios-row ios-row--disclosure" type="button" data-ios-push="detail">
+                <span class="ios-row__icon"><span data-ios-symbol="document"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Disclosure row</span><span class="ios-row__subtitle">Opens a pushed detail view</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+              <div class="ios-row">
+                <span class="ios-row__icon" style="background:var(--ios-purple)"><span data-ios-symbol="bell"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Unread items</span></span>
+                <span class="ios-row__badge">4</span>
+              </div>
+              <div class="ios-swipe-row" data-ios-swipe-row>
+                <div class="ios-swipe-actions">
+                  <button class="ios-swipe-action" type="button" data-ios-swipe-close>More</button>
+                  <button class="ios-swipe-action ios-swipe-action--destructive" type="button" data-ios-swipe-close id="demoDelete">Delete</button>
+                </div>
+                <div class="ios-swipe-content">
+                  <div class="ios-row">
+                    <span class="ios-row__icon" style="background:var(--ios-orange)"><span data-ios-symbol="folder"></span></span>
+                    <span class="ios-row__body"><span class="ios-row__title">Swipe left</span><span class="ios-row__subtitle">Reveals contextual row actions</span></span>
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Progress & Status</div>
+            <div class="ios-card ios-stack">
+              <progress class="ios-progress" value="64" max="100">64%</progress>
+              <div class="ios-status"><div class="ios-spinner" aria-label="Loading"></div><div><div class="ios-headline">Updating Library</div><div class="ios-subheadline ios-secondary">This is a persistent inline status.</div></div></div>
+              <div class="ios-hstack"><span class="ios-body">Unread</span><span class="ios-badge">12</span><span class="ios-spacer"></span><div class="ios-page-control" aria-label="Page 2 of 4"><span></span><span aria-current="true"></span><span></span><span></span></div></div>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Empty State</div>
+            <div class="ios-card ios-empty-state">
+              <div>
+                <div class="ios-empty-state__symbol"><span data-ios-symbol="folder"></span></div>
+                <div class="ios-empty-state__title">No Downloads</div>
+                <div class="ios-empty-state__message">Items you save for offline use will appear here.</div>
+                <button class="ios-button ios-button--tinted" type="button">Browse Library</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="ios-tab-panel" data-ios-tab-panel="patterns" tabindex="-1" hidden>
+      <header class="ios-navigation-bar">
+        <div class="ios-navigation-bar__row">
+          <div class="ios-navigation-bar__leading"></div>
+          <div class="ios-navigation-bar__title">Patterns</div>
+          <div class="ios-navigation-bar__trailing">
+            <div class="ios-glass-group">
+              <button class="ios-bar-button ios-bar-button--icon" type="button" data-ios-menu-trigger="top-menu" aria-label="More options"><span data-ios-symbol="ellipsis"></span></button>
+            </div>
           </div>
-        </section>
+        </div>
+      </header>
+      <div class="ios-scroll" data-ios-tabbar-minimize>
+        <div class="ios-content">
+          <h1 class="ios-large-title">Patterns</h1>
 
-        <button class="ios-button ios-button--block" id="toastButton"><i data-lucide="check"></i> Show feedback</button>
+          <section class="ios-section">
+            <div class="ios-section__header">Navigation</div>
+            <div class="ios-list">
+              <button class="ios-row ios-row--disclosure" type="button" data-ios-push="detail">
+                <span class="ios-row__icon"><span data-ios-symbol="document"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Push navigation</span><span class="ios-row__subtitle">Also supports edge swipe back</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Presentations</div>
+            <div class="ios-list">
+              <button class="ios-row ios-row--disclosure" type="button" data-ios-present="sheet-demo">
+                <span class="ios-row__icon" style="background:var(--ios-purple)"><span data-ios-symbol="sliders"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Sheet</span><span class="ios-row__subtitle">Scoped task with drag to dismiss</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+              <button class="ios-row ios-row--disclosure" type="button" data-ios-present="alert-demo">
+                <span class="ios-row__icon" style="background:var(--ios-red)"><span data-ios-symbol="info"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Alert</span><span class="ios-row__subtitle">For important, actionable information</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+              <button class="ios-row ios-row--disclosure" type="button" data-ios-present="actions-demo">
+                <span class="ios-row__icon" style="background:var(--ios-orange)"><span data-ios-symbol="ellipsis"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Action sheet</span><span class="ios-row__subtitle">Choices related to an intentional action</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Menus</div>
+            <div class="ios-card ios-stack">
+              <div class="ios-hstack">
+                <div><div class="ios-headline">Pull-down menu</div><div class="ios-subheadline ios-secondary">Keeps secondary commands out of the main interface.</div></div>
+                <span class="ios-spacer"></span>
+                <button class="ios-button ios-button--tinted" type="button" data-ios-menu-trigger="example-menu">Options</button>
+              </div>
+              <div class="ios-card" data-ios-context-menu="example-menu" style="background:var(--ios-background-secondary)">
+                <div class="ios-headline">Context menu target</div>
+                <div class="ios-subheadline ios-secondary">Touch and hold, or secondary click.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">Toolbar</div>
+            <div class="ios-card">
+              <div class="ios-toolbar">
+                <div class="ios-toolbar__group">
+                  <button class="ios-toolbar__button" type="button" aria-label="Back"><span data-ios-symbol="chevronLeft"></span></button>
+                  <button class="ios-toolbar__button" type="button" aria-label="Forward"><span data-ios-symbol="chevronRight"></span></button>
+                </div>
+                <div class="ios-toolbar__group">
+                  <button class="ios-toolbar__button" type="button" aria-label="Share"><span data-ios-symbol="share"></span></button>
+                  <button class="ios-toolbar__button" type="button" data-ios-menu-trigger="example-menu" aria-label="More"><span data-ios-symbol="ellipsis"></span></button>
+                </div>
+              </div>
+              <div class="ios-subheadline ios-secondary">Related symbol actions share a glass group. Text actions should sit separately.</div>
+            </div>
+          </section>
+        </div>
       </div>
-
-      <nav class="ios-tabbar" aria-label="Primary">
-        <button class="ios-tabbar__item" aria-current="page"><i data-lucide="house"></i><span>Home</span></button>
-        <button class="ios-tabbar__item"><i data-lucide="square-stack"></i><span>Library</span></button>
-        <button class="ios-tabbar__item"><i data-lucide="gear"></i><span>Settings</span></button>
-      </nav>
     </section>
 
-    <section class="ios-screen ios-has-navbar" data-ios-route="details">
-      <nav class="ios-navbar">
-        <div class="ios-navbar__leading"><button class="ios-navbar__button" id="backButton"><i data-lucide="chevron-left"></i><span>Back</span></button></div>
-        <div class="ios-navbar__title">Details</div>
-        <div class="ios-navbar__trailing"><button class="ios-navbar__button"><i data-lucide="ellipsis-circle"></i></button></div>
-      </nav>
-      <div class="ios-content">
-        <div class="ios-large-title">Native patterns</div>
-        <div class="ios-card">
-          <div class="ios-title">Motion with hierarchy</div>
-          <div class="ios-muted">Forward navigation enters from the trailing edge. Back navigation reverses the relationship. New screens start at the top before they become visible.</div>
+    <section class="ios-tab-panel" data-ios-tab-panel="settings" tabindex="-1" hidden>
+      <header class="ios-navigation-bar">
+        <div class="ios-navigation-bar__row">
+          <div class="ios-navigation-bar__leading"></div>
+          <div class="ios-navigation-bar__title">Settings</div>
+          <div class="ios-navigation-bar__trailing"></div>
         </div>
-        <div class="ios-card">
-          <div class="ios-title">Accessibility built in</div>
-          <div class="ios-muted">Semantic colours, 44 point hit targets, focus styles, dark mode and reduced motion are defaults rather than optional polish.</div>
+      </header>
+      <div class="ios-scroll" data-ios-tabbar-minimize>
+        <div class="ios-content">
+          <h1 class="ios-large-title">Settings</h1>
+
+          <section class="ios-section">
+            <div class="ios-list">
+              <div class="ios-row">
+                <span class="ios-row__icon"><span data-ios-symbol="person"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Framework Demo</span><span class="ios-row__subtitle">iOS-style web foundation</span></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="ios-section">
+            <div class="ios-section__header">General</div>
+            <div class="ios-list">
+              <label class="ios-row">
+                <span class="ios-row__icon" style="background:var(--ios-green)"><span data-ios-symbol="bell"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Notifications</span></span>
+                <span class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></span>
+              </label>
+              <button class="ios-row" type="button">
+                <span class="ios-row__icon" style="background:var(--ios-indigo)"><span data-ios-symbol="grid"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Appearance</span></span>
+                <span class="ios-row__value">System</span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+              <button class="ios-row" type="button">
+                <span class="ios-row__icon" style="background:var(--ios-orange)"><span data-ios-symbol="info"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">About</span></span>
+                <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
+              </button>
+            </div>
+            <div class="ios-section__footer">The framework follows the device's light, dark, reduced-motion, reduced-transparency, contrast, and safe-area settings.</div>
+          </section>
         </div>
       </div>
     </section>
+
+    <section class="ios-push-screen" data-ios-screen="detail" tabindex="-1" hidden>
+      <header class="ios-navigation-bar is-scrolled">
+        <div class="ios-navigation-bar__row">
+          <div class="ios-navigation-bar__leading">
+            <div class="ios-glass-group"><button class="ios-bar-button" type="button" data-ios-back><span data-ios-symbol="chevronLeft"></span><span>Back</span></button></div>
+          </div>
+          <div class="ios-navigation-bar__title" style="opacity:1;transform:none">Detail</div>
+          <div class="ios-navigation-bar__trailing">
+            <div class="ios-glass-group"><button class="ios-bar-button ios-bar-button--icon" type="button" data-ios-menu-trigger="example-menu" aria-label="More"><span data-ios-symbol="ellipsis"></span></button></div>
+          </div>
+        </div>
+      </header>
+      <div class="ios-scroll">
+        <div class="ios-content">
+          <h1 class="ios-large-title">Detail View</h1>
+          <div class="ios-card ios-stack">
+            <div class="ios-title-2">Navigation that behaves like navigation</div>
+            <div class="ios-body ios-secondary">The new screen moves in from the trailing edge and the previous screen retains its scroll position. Swipe from the left edge to go back.</div>
+          </div>
+          <section class="ios-section" style="margin-top:24px">
+            <div class="ios-section__header">Example Content</div>
+            <div class="ios-list">
+              <div class="ios-row"><span class="ios-row__body"><span class="ios-row__title">First setting</span></span><span class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></span></div>
+              <div class="ios-row"><span class="ios-row__body"><span class="ios-row__title">Second setting</span></span><span class="ios-row__value">Automatic</span></div>
+              <div class="ios-row"><span class="ios-row__body"><span class="ios-row__title">Third setting</span></span><span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <div class="ios-tabbar-wrap">
+      <nav class="ios-tabbar" aria-label="Primary navigation">
+        <button class="ios-tabbar__item" type="button" data-ios-tab="components" aria-selected="true"><span data-ios-symbol="grid"></span><span>Components</span></button>
+        <button class="ios-tabbar__item" type="button" data-ios-tab="patterns" aria-selected="false"><span data-ios-symbol="star"></span><span>Patterns</span></button>
+        <button class="ios-tabbar__item" type="button" data-ios-tab="settings" aria-selected="false"><span data-ios-symbol="gear"></span><span>Settings</span></button>
+      </nav>
+    </div>
   </main>
 
-  <section class="ios-sheet" id="demoSheet" aria-labelledby="demoSheetTitle">
-    <div class="ios-sheet__grabber"></div>
-    <div class="ios-sheet__header">
-      <div class="ios-sheet__title" id="demoSheetTitle">Example sheet</div>
-      <button class="ios-icon-button" data-ios-dismiss aria-label="Close"><i data-lucide="x"></i></button>
-    </div>
-    <div class="ios-sheet__body">
-      <p class="ios-muted">Sheets use a distinct modal layer, safe-area spacing, a dimmed background, focus management and drag-to-dismiss behaviour.</p>
-      <button class="ios-button ios-button--block" data-ios-dismiss>Done</button>
-    </div>
-  </section>
+  <div class="ios-menu" data-ios-menu="top-menu" hidden>
+    <button class="ios-menu__item" type="button"><span>New Item</span><span data-ios-symbol="plus"></span></button>
+    <button class="ios-menu__item" type="button"><span>Share</span><span data-ios-symbol="share"></span></button>
+    <div class="ios-menu__separator"></div>
+    <button class="ios-menu__item" type="button"><span>Settings</span><span data-ios-symbol="gear"></span></button>
+  </div>
+
+  <div class="ios-menu" data-ios-menu="example-menu" hidden>
+    <button class="ios-menu__item" type="button"><span>Edit</span><span data-ios-symbol="pencil"></span></button>
+    <button class="ios-menu__item" type="button"><span>Share</span><span data-ios-symbol="share"></span></button>
+    <div class="ios-menu__separator"></div>
+    <button class="ios-menu__item ios-menu__item--destructive" type="button"><span>Delete</span><span data-ios-symbol="trash"></span></button>
+  </div>
+
+  <div class="ios-overlay" data-ios-overlay="sheet-demo" hidden>
+    <section class="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="ios-sheet__grabber" data-ios-sheet-handle></div>
+      <header class="ios-sheet__header">
+        <button class="ios-bar-button ios-sheet__leading" type="button" data-ios-dismiss>Cancel</button>
+        <div class="ios-sheet__title" id="sheetTitle">New Collection</div>
+        <button class="ios-bar-button ios-bar-button--accent ios-sheet__trailing" type="button" data-ios-dismiss>Done</button>
+      </header>
+      <div class="ios-sheet__body ios-stack">
+        <label class="ios-text-field"><input type="text" placeholder="Collection Name" aria-label="Collection name"></label>
+        <div class="ios-list">
+          <label class="ios-row"><span class="ios-row__body"><span class="ios-row__title">Make Public</span></span><span class="ios-switch"><input type="checkbox"><span class="ios-switch__track"></span></span></label>
+          <label class="ios-row"><span class="ios-row__body"><span class="ios-row__title">Notify Me</span></span><span class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></span></label>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="ios-overlay ios-overlay--center" data-ios-overlay="alert-demo" hidden>
+    <section class="ios-alert" role="alertdialog" aria-modal="true" aria-labelledby="alertTitle">
+      <div class="ios-alert__content"><div class="ios-alert__title" id="alertTitle">Remove Download?</div><div class="ios-alert__message">You can download it again later.</div></div>
+      <div class="ios-alert__actions ios-alert__actions--horizontal">
+        <button class="ios-alert__action" type="button" data-ios-dismiss>Cancel</button>
+        <button class="ios-alert__action ios-alert__action--destructive ios-alert__action--preferred" type="button" data-ios-dismiss>Remove</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="ios-overlay" data-ios-overlay="actions-demo" hidden>
+    <section class="ios-action-sheet" role="dialog" aria-modal="true" aria-labelledby="actionsTitle">
+      <div class="ios-action-sheet__group">
+        <div class="ios-action-sheet__title" id="actionsTitle">Choose an action</div>
+        <button class="ios-action-sheet__action" type="button" data-ios-dismiss>Save Draft</button>
+        <button class="ios-action-sheet__action ios-action-sheet__action--destructive" type="button" data-ios-dismiss>Delete Draft</button>
+      </div>
+      <div class="ios-action-sheet__cancel"><button class="ios-action-sheet__action" type="button" data-ios-dismiss>Cancel</button></div>
+    </section>
+  </div>
 </body>
 </html>
