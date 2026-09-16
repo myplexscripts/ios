@@ -1,5 +1,6 @@
 import { renderLucide } from '../src/framework.js';
 import './adaptive-demo.js';
+import './native-patterns.js';
 
 const contentGallery = `
   <section class="ios-section">
