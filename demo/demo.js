@@ -1,4 +1,4 @@
-import { renderSymbols } from '../src/ios.js';
+import { renderSymbols } from '../src/framework.js';
 
 const contentStyles = document.createElement('link');
 contentStyles.rel = 'stylesheet';
