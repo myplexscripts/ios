@@ -49,6 +49,11 @@
   border-radius: var(--ios-container-radius);
 }
 
+.ios-card--plain {
+  --ios-container-radius: 0px;
+  border-radius: 0;
+}
+
 /* Full bleed media shares the parent's outer contour. */
 .ios-card__media,
 .ios-scroll-card__media {
@@ -108,7 +113,7 @@
 .ios-popover > .ios-list,
 .ios-popover > .ios-content-group,
 .ios-popover > .ios-inline-message {
-  border-radius: max(0px, calc(var(--ios-container-radius) - var(--ios-container-inset)));
+  border-radius: var(--ios-popover-inner-radius);
 }
 
 /* Sheets use a 30px outer contour. Surfaces inside the 16px body inset use 14px. */
@@ -126,13 +131,44 @@
 .ios-sheet__body > .ios-text-field,
 .ios-sheet__body > .ios-text-view,
 .ios-sheet__body > .ios-picker-field {
-  border-radius: max(0px, calc(var(--ios-container-radius) - var(--ios-container-inset)));
+  border-radius: calc(var(--ios-radius-sheet) - 16px);
 }
 
 /* Source aware action groups and alerts are standalone rounded surfaces. */
 .ios-alert { border-radius: var(--ios-radius-xl); }
 .ios-action-sheet__group,
 .ios-action-sheet__cancel { border-radius: var(--ios-radius-l); }
+
+/* Capsules and circles intentionally remain geometry based rather than token based. */
+.ios-button,
+.ios-chip,
+.ios-token,
+.ios-status-pill,
+.ios-badge,
+.ios-row__badge,
+.ios-app-row__action,
+.ios-glass-group,
+.ios-bar-button,
+.ios-toolbar__group,
+.ios-toolbar__button,
+.ios-progress,
+.ios-stepper,
+.ios-stepper button,
+.ios-search-field,
+.ios-switch__track,
+.ios-insight-rule,
+.ios-stacked-bar__track,
+.ios-horizontal-bar__track {
+  border-radius: 999px;
+}
+
+.ios-avatar,
+.ios-recommendation-card__dismiss,
+.ios-page-control [data-ios-page],
+.ios-page-control [data-ios-page]::after,
+.ios-chart-legend__dot {
+  border-radius: 50%;
+}
 
 /* Regular width top level navigation has 10px padding inside a 30px shell. */
 @media (min-width: 760px) and (min-height: 600px) {
@@ -155,37 +191,4 @@
     --ios-container-inset: 16px;
     border-radius: var(--ios-container-radius);
   }
-}
-
-/* Capsules and circles intentionally remain geometry based rather than token based. */
-.ios-button,
-.ios-chip,
-.ios-token,
-.ios-status-pill,
-.ios-badge,
-.ios-row__badge,
-.ios-app-row__action,
-.ios-glass-group,
-.ios-bar-button,
-.ios-toolbar__group,
-.ios-toolbar__button,
-.ios-tabbar,
-.ios-tabbar__item,
-.ios-progress,
-.ios-stepper,
-.ios-stepper button,
-.ios-search-field,
-.ios-switch__track,
-.ios-insight-rule,
-.ios-stacked-bar__track,
-.ios-horizontal-bar__track {
-  border-radius: 999px;
-}
-
-.ios-avatar,
-.ios-recommendation-card__dismiss,
-.ios-page-control [data-ios-page],
-.ios-page-control [data-ios-page]::after,
-.ios-chart-legend__dot {
-  border-radius: 50%;
 }
