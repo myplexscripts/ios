@@ -18,7 +18,7 @@
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/framework.js && node --check demo/demo.js",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/framework.js && node --check demo/demo.js && node --check demo/adaptive-demo.js",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
