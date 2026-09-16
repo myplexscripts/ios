@@ -2,9 +2,10 @@ function compactLargeTitleThreshold(scroll, panel) {
   const title = panel?.querySelector('.ios-content > .ios-large-title:first-child');
   if (!title) return 28;
 
+  const scrollPaddingTop = Number.parseFloat(getComputedStyle(scroll).paddingTop) || 0;
   const titleTop = title.offsetTop;
   const titleHeight = title.offsetHeight || 41;
-  return Math.max(52, titleTop + titleHeight - 8);
+  return Math.max(52, scrollPaddingTop + titleTop + titleHeight - 8);
 }
 
 function syncNavigationState(scroll) {
