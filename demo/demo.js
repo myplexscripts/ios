@@ -1,25 +1,18 @@
-import {
-  IOSRouter,
-  presentSheet,
-  presentActionSheet,
-  showToast,
-  refreshIcons
-} from '../src/ios.js';
+import { renderSymbols } from '../src/ios.js';
 
-const router = new IOSRouter('#app').start('home');
+const ready = () => {
+  renderSymbols(document);
 
-document.querySelector('#backButton').addEventListener('click', () => router.back());
-document.querySelector('#sheetButton').addEventListener('click', () => presentSheet('#demoSheet'));
-document.querySelector('#toastButton').addEventListener('click', () => showToast({ title: 'Saved', message: 'Your changes are up to date.' }));
-document.querySelector('#actionButton').addEventListener('click', () => {
-  presentActionSheet({
-    title: 'Choose an action',
-    message: 'Use action sheets for contextual choices.',
-    actions: [
-      { label: 'Duplicate', onSelect: () => showToast({ title: 'Duplicated' }) },
-      { label: 'Delete', destructive: true, onSelect: () => showToast({ title: 'Deleted', icon: 'trash-2' }) }
-    ]
+  const deleteButton = document.querySelector('#demoDelete');
+  deleteButton?.addEventListener('click', () => {
+    const row = deleteButton.closest('.ios-swipe-row');
+    row?.animate([{ opacity: 1, height: `${row.offsetHeight}px` }, { opacity: 0, height: '0px' }], {
+      duration: 220,
+      easing: 'ease-out',
+      fill: 'forwards'
+    }).finished.then(() => row.remove());
   });
-});
+};
 
-window.addEventListener('load', () => refreshIcons());
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true });
+else ready();
