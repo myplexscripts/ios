@@ -1,8 +1,32 @@
-import './framework/framework.js';
+import { GlassKitApp } from './framework/framework.js';
 
-// Keep app-specific behaviour here. Navigation, gestures, menus, sheets,
-// adaptive layout, keyboard behaviour and Lucide rendering are provided by
-// the framework automatically.
+export const app = new GlassKitApp({
+  root: '[data-glasskit-app]',
+  name: 'App Name',
+  router: {
+    mode: 'hash',
+    defaultRoute: '/'
+  },
+  routes: [
+    { path: '/', tab: 'home' },
+    { path: '/library', tab: 'library' },
+    { path: '/settings', tab: 'settings' },
+    {
+      path: '/detail/:id',
+      tab: 'home',
+      screen: 'detail',
+      enter({ params }) {
+        const title = document.querySelector('[data-starter-detail-title]');
+        if (title) title.textContent = params.id.replace(/[-_]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+      }
+    },
+    { path: '/detail', tab: 'home', screen: 'detail' },
+    { path: '*', redirect: '/' }
+  ],
+  store: {
+    searchQuery: ''
+  }
+}).init();
 
 const search = document.querySelector('#starterSearch');
 const rows = [...document.querySelectorAll('#starterList [data-starter-search]')];
@@ -12,6 +36,7 @@ function filterLibrary() {
   if (!search) return;
 
   const query = search.value.trim().toLowerCase();
+  app.store.set('searchQuery', query);
   let visible = 0;
 
   rows.forEach(row => {
