@@ -16,6 +16,8 @@
     "./presentations": "./src/presentations.js",
     "./behavior": "./src/behavior.js",
     "./styles": "./src/framework.css",
+    "./colors": "./src/system-colors.css",
+    "./chrome": "./src/chrome.css",
     "./content": "./src/content.css",
     "./adaptive": "./src/adaptive.css",
     "./refinements": "./src/refinements.css",
