@@ -75,6 +75,7 @@ export class GlassKitComponentInstance {
     this.rendering = this.rendering.then(async () => {
       const rendered = await this.definition.render?.(this.api());
       applyRenderedContent(this.host, rendered);
+      this.context.app?.enhance?.(this.host);
     });
     await this.rendering;
     return this;
