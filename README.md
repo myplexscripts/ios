@@ -2,25 +2,24 @@
 
 GlassKit is an opinionated web application framework for building native-feeling iOS and iPadOS-style apps in ordinary HTML, CSS and JavaScript.
 
-It combines the existing HIG-aligned UI system with an application layer inspired by the useful parts of frameworks such as Framework7: an app instance, router, shared store, lifecycle events, adaptive navigation and reusable components, without requiring a build system.
+It is intentionally focused: one Apple-style design system, one app runtime, and the infrastructure most apps repeatedly need without requiring a build system.
 
 ## Start a new app
 
-Use the self-contained `starter/` folder.
+Copy the self-contained `starter/` folder into a new project:
 
 ```text
 starter/
   index.html
   app.css
   app.js
+  components/
   framework/
 ```
 
-Copy that folder into a new project and replace the placeholder content. It does not depend on files outside the folder.
+`framework/` is a snapshot of GlassKit. The new app does not depend on this repository at runtime.
 
-## App instance
-
-New GlassKit apps start with one app object:
+## App runtime
 
 ```js
 import { GlassKitApp } from './framework/framework.js';
@@ -28,25 +27,52 @@ import { GlassKitApp } from './framework/framework.js';
 export const app = new GlassKitApp({
   root: '[data-glasskit-app]',
   name: 'My App',
+  router: { mode: 'hash', defaultRoute: '/' },
   routes: [
     { path: '/', tab: 'home' },
     { path: '/library', tab: 'library' },
-    { path: '/item/:id', tab: 'library', screen: 'detail' },
+    {
+      name: 'item',
+      path: '/item/:id',
+      loadComponent: () => import('./components/item.js')
+    },
     { path: '*', redirect: '/' }
   ],
   store: {
-    selectedItem: null
+    state: { items: [] },
+    getters: {
+      itemCount: state => state.items.length
+    },
+    actions: {
+      setItems({ set }, items) { set('items', items); }
+    }
   }
 }).init();
+
+await app.whenReady();
 ```
 
-The app instance owns the router and shared store while the existing `data-ios-*` component primitives remain available for UI behaviour.
+## Foundation services
 
-## Router
+Every `GlassKitApp` includes:
 
-`GlassKitRouter` provides URL-aware navigation, browser Back and Forward support, route parameters, direct links, redirects and route lifecycle hooks.
+```js
+app.router    // URL-aware navigation and routed components
+app.store     // reactive state, getters and actions
+app.request   // fetch wrapper with timeout, caching and request deduplication
+app.storage   // namespaced JSON persistence with an in-memory fallback
+app.dialog    // alert, confirm and prompt
+app.sheet     // programmatic sheets
+app.toast     // transient notifications
+app.loading   // loading presentation and async helper
+app.plugins   // optional framework/app modules
+```
 
-GlassKit defaults to hash routing because it works on static hosting without server rewrite rules:
+Large collections can use `GlassKitVirtualList` so thousands of rows do not need thousands of live DOM nodes.
+
+## Router and routed components
+
+GlassKit defaults to hash routing so static hosting works without rewrite rules:
 
 ```text
 #/library
@@ -59,66 +85,103 @@ Navigate declaratively:
 <button data-glasskit-link="/item/123">Open</button>
 ```
 
-or from JavaScript:
+or programmatically:
 
 ```js
-app.navigate('/item/123');
+await app.navigate('/item/123');
+await app.router.to('item', { id: 123 });
 app.router.back();
-app.replace('/library');
 ```
 
-Route callbacks receive `params`, `query`, `store`, `router` and `app`.
+Routes support parameters, query values, redirects, async data resolution, route guards, lazy component imports, component caching, scroll restoration and browser Back/Forward.
 
-## Shared store
+See `COMPONENTS_AND_ROUTING.md` for the component and router API.
 
-GlassKit includes a deliberately small reactive store:
+## Store
+
+The simple form remains supported:
 
 ```js
-app.store.set('selectedItem', 123);
+store: { selectedItem: null }
+```
 
-const unsubscribe = app.store.subscribe('selectedItem', value => {
-  console.log(value);
+For larger apps use state, getters and actions:
+
+```js
+store: {
+  state: { count: 0 },
+  getters: {
+    doubled: state => state.count * 2
+  },
+  actions: {
+    increment({ update }) {
+      update('count', value => value + 1);
+    }
+  }
+}
+```
+
+```js
+app.store.dispatch('increment');
+console.log(app.store.getters.doubled);
+```
+
+## Requests
+
+```js
+const items = await app.request.get('/api/items', {
+  query: { page: 1 },
+  cache: true
 });
 ```
 
-You can also use `app.store.state` directly or update several values with `patch()`.
+Identical in-flight GET requests are deduplicated. Requests support timeout, cancellation, JSON request bodies, response parsing and short-lived memory caching.
 
-## Lifecycle
+## Presentations
 
-GlassKit emits app and navigation lifecycle events such as:
+```js
+await app.dialog.alert('Saved');
+const confirmed = await app.dialog.confirm('Delete this item?', { destructive: true });
+app.toast.show('Updated');
 
-```text
-glasskit:ready
-glasskit:routebeforechange
-glasskit:routechange
-glasskit:pageenter
-glasskit:destroy
+const sheet = app.sheet.open({
+  title: 'Options',
+  content: '<div class="ios-list">...</div>'
+});
 ```
 
-Routes can also define `beforeEnter`, `enter` and `leave` callbacks.
+The markup-based `data-ios-*` presentation system remains available as well.
+
+## Virtual list
+
+```js
+import { GlassKitVirtualList } from './framework/framework.js';
+
+const list = new GlassKitVirtualList({
+  container: '#results',
+  items,
+  rowHeight: 56,
+  renderItem: item => `<div class="ios-row">${item.name}</div>`
+});
+```
+
+## Plugins
+
+```js
+await app.use({
+  name: 'example',
+  install(app) {
+    app.example = { enabled: true };
+  },
+  destroy(app) {
+    delete app.example;
+  }
+});
+```
 
 ## UI system
 
-GlassKit includes the existing reusable iOS/iPadOS component layer:
-
-- compact and regular-width navigation
-- large-title headers
-- tab bars and leading navigation
-- push transitions and edge swipe back
-- safe areas
-- sheets, alerts, menus, popovers and toolbars
-- lists, forms, search and selection controls
-- cards, editorial patterns and horizontal scrollers
-- charts and data presentation
-- Lucide icons
-- semantic light and dark colours
-- reduced motion and reduced transparency support
-- keyboard, pointer and touch behaviour
-- concentric radius rules
-
-The `ios-*` class names remain for backward compatibility and because they describe the platform design primitives. The framework itself is GlassKit.
-
-## Concentric radii
+GlassKit includes compact and regular-width navigation, large titles, tabs, push transitions, swipe back, safe areas, sheets, dialogs, menus, popovers, lists, forms, cards, horizontal collections, charts, Lucide icons, semantic Apple system colours, accessibility behaviour, dark mode and concentric radii.
 
 Nested rounded surfaces follow one rule:
 
@@ -126,17 +189,23 @@ Nested rounded surfaces follow one rule:
 inner radius = outer radius - inset
 ```
 
-Do not choose unrelated radii for nested surfaces. `src/radii.css` enforces this across framework components.
+The existing `ios-*` classes remain intentionally supported as the low-level Apple-platform UI primitives. GlassKit is the application framework above them.
 
 ## Repository layout
 
 ```text
-src/        GlassKit framework source
-demo/       full component and behaviour reference
+src/        master GlassKit framework source
+demo/       interactive component and behaviour reference
 starter/    self-contained new-app template
+tools/      validation and starter sync scripts
 ```
 
-The main JavaScript entry point is `src/framework.js`. It exports `GlassKitApp`, `GlassKitRouter`, `GlassKitStore` and the lower-level UI modules.
+When framework source changes, run:
+
+```bash
+npm run sync:starter
+npm run check
+```
 
 ## Run locally
 
@@ -144,11 +213,9 @@ The main JavaScript entry point is `src/framework.js`. It exports `GlassKitApp`,
 python -m http.server 4173
 ```
 
-Open:
+Then open:
 
 ```text
 http://localhost:4173/starter/
 http://localhost:4173/demo/
 ```
-
-Use `starter/` to build apps. Use `demo/` only as the component reference.
