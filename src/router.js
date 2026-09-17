@@ -24,10 +24,7 @@ function compileRoute(path) {
     }
     return segment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }).join('/');
-  return {
-    regex: new RegExp(`^/${pattern}${segments.length ? '' : ''}/?$`),
-    keys
-  };
+  return { regex: new RegExp(`^/${pattern}/?$`), keys };
 }
 
 function buildPath(pattern, params = {}) {
@@ -104,6 +101,13 @@ export class GlassKitRouter {
     return this.routes.find(route => route.screen === screen && !route.path.includes(':'));
   }
 
+  targetFor(context) {
+    if (!context) return null;
+    if (context.route.screen) return this.app.root.querySelector(`[data-ios-screen="${CSS.escape(context.route.screen)}"]`);
+    if (context.route.tab) return this.app.root.querySelector(`[data-ios-tab-panel="${CSS.escape(context.route.tab)}"]`);
+    return null;
+  }
+
   navigate(path, options = {}) {
     const target = normalisePath(path);
     const matched = this.match(target);
@@ -150,29 +154,38 @@ export class GlassKitRouter {
       store: this.app.store
     };
     const previous = this.current;
+    const previousTarget = this.targetFor(previous);
+    const nextTarget = this.targetFor(next);
 
     if (matched.route.beforeEnter && await matched.route.beforeEnter(next, previous) === false) return false;
+
+    previousTarget?.dispatchEvent(new CustomEvent('glasskit:pagebeforeleave', { bubbles: true, detail: { from: previous, to: next } }));
+    nextTarget?.dispatchEvent(new CustomEvent('glasskit:pagebeforeenter', { bubbles: true, detail: { from: previous, to: next } }));
     previous?.route?.leave?.(previous, next);
     this.app.emit('routebeforechange', { from: previous, to: next });
 
     this.applying = true;
     try {
-      if (matched.route.tab) this.app.selectTab(matched.route.tab, direction !== 'replace');
-      if (matched.route.screen) await this.app.push(matched.route.screen);
+      const returningFromScreen = direction === 'back' && previous?.route?.screen && !matched.route.screen;
+      if (returningFromScreen) {
+        await this.app.transitionBack();
+        if (matched.route.tab && this.app.activeTab !== matched.route.tab) this.app.transitionToTab(matched.route.tab, false);
+      } else {
+        if (matched.route.tab && this.app.activeTab !== matched.route.tab) this.app.transitionToTab(matched.route.tab, direction !== 'replace');
+        const sameScreen = previous?.route?.screen && previous.route.screen === matched.route.screen;
+        if (matched.route.screen && !sameScreen) await this.app.transitionPush(matched.route.screen);
+      }
     } finally {
       this.applying = false;
     }
 
-    const target = matched.route.screen
-      ? this.app.root.querySelector(`[data-ios-screen="${CSS.escape(matched.route.screen)}"]`)
-      : matched.route.tab
-        ? this.app.root.querySelector(`[data-ios-tab-panel="${CSS.escape(matched.route.tab)}"]`)
-        : null;
-
-    if (target) {
-      target.glasskitRoute = next;
-      target.dataset.glasskitRoutePath = matched.path;
-      target.dispatchEvent(new CustomEvent('glasskit:pageenter', { bubbles: true, detail: next }));
+    if (previousTarget && previousTarget !== nextTarget) {
+      previousTarget.dispatchEvent(new CustomEvent('glasskit:pageleave', { bubbles: true, detail: { from: previous, to: next } }));
+    }
+    if (nextTarget) {
+      nextTarget.glasskitRoute = next;
+      nextTarget.dataset.glasskitRoutePath = matched.path;
+      nextTarget.dispatchEvent(new CustomEvent('glasskit:pageenter', { bubbles: true, detail: next }));
     }
 
     this.current = next;
