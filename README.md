@@ -1,310 +1,154 @@
-# iOS Web Framework
+# GlassKit
 
-A reusable HIG-aligned web foundation for apps that should feel at home on iPhone, iPad, and large desktop browser windows.
+GlassKit is an opinionated web application framework for building native-feeling iOS and iPadOS-style apps in ordinary HTML, CSS and JavaScript.
 
-It mirrors the parts of current Apple interface design that translate to the web: hierarchy, semantic colour, typography, content layout, controls, navigation, gestures, modality, safe areas, adaptive size classes, keyboard and pointer input, accessibility, and current Liquid Glass relationships.
+It combines the existing HIG-aligned UI system with an application layer inspired by the useful parts of frameworks such as Framework7: an app instance, router, shared store, lifecycle events, adaptive navigation and reusable components, without requiring a build system.
 
-## Use it
+## Start a new app
 
-No build step is required.
+Use the self-contained `starter/` folder.
 
-```html
-<link rel="stylesheet" href="/ios/src/framework.css">
-<script type="module" src="/ios/src/framework.js"></script>
+```text
+starter/
+  index.html
+  app.css
+  app.js
+  framework/
 ```
 
-`framework.css` and `framework.js` are the public entry points. Every `data-ios-app` root initializes automatically.
+Copy that folder into a new project and replace the placeholder content. It does not depend on files outside the folder.
 
-## Icons
+## App instance
 
-Lucide is the framework icon system. The framework loads a pinned Lucide web build and converts `data-ios-symbol` names to their Lucide equivalents. A small built-in SVG fallback remains only so the interface does not become unusable if the icon resource cannot load.
+New GlassKit apps start with one app object:
 
-```html
-<span data-ios-symbol="search"></span>
-<span data-ios-symbol="gear"></span>
-<span data-ios-symbol="chevronRight"></span>
+```js
+import { GlassKitApp } from './framework/framework.js';
+
+export const app = new GlassKitApp({
+  root: '[data-glasskit-app]',
+  name: 'My App',
+  routes: [
+    { path: '/', tab: 'home' },
+    { path: '/library', tab: 'library' },
+    { path: '/item/:id', tab: 'library', screen: 'detail' },
+    { path: '*', redirect: '/' }
+  ],
+  store: {
+    selectedItem: null
+  }
+}).init();
 ```
 
-Common interface sizing and alignment are applied automatically.
+The app instance owns the router and shared store while the existing `data-ios-*` component primitives remain available for UI behaviour.
 
-## Adaptive platform behaviour
+## Router
 
-The same app changes presentation with available space instead of stretching one layout.
+`GlassKitRouter` provides URL-aware navigation, browser Back and Forward support, route parameters, direct links, redirects and route lifecycle hooks.
 
-### Compact
+GlassKit defaults to hash routing because it works on static hosting without server rewrite rules:
 
-Compact uses iPhone-style patterns:
+```text
+#/library
+#/item/123
+```
 
-- floating bottom tab bar
-- large title in scrolling content with the trailing action aligned to the title region
-- compact navigation title after scrolling
-- single-column hierarchy
-- push screens
-- left-edge swipe back
-- swipe actions
-- compact sheets and source-aware transient actions
-- touch-first 44px or larger hit areas
-- split views collapse into navigation stacks
+Navigate declaratively:
 
-### Regular
+```html
+<button data-glasskit-link="/item/123">Open</button>
+```
 
-Regular uses iPad-style patterns:
+or from JavaScript:
 
-- leading top-level navigation
-- wider content canvas
-- split views and inspectors
-- popovers
-- richer toolbars
-- pointer hover feedback
-- keyboard navigation
-- Command-Comma Settings shortcut when a Settings tab exists
+```js
+app.navigate('/item/123');
+app.router.back();
+app.replace('/library');
+```
 
-Width and height both participate in the size-class decision so a landscape phone does not suddenly become a desktop interface.
+Route callbacks receive `params`, `query`, `store`, `router` and `app`.
 
-## Accessibility defaults
+## Shared store
 
-The framework treats accessibility as structural rather than optional polish.
+GlassKit includes a deliberately small reactive store:
 
+```js
+app.store.set('selectedItem', 123);
+
+const unsubscribe = app.store.subscribe('selectedItem', value => {
+  console.log(value);
+});
+```
+
+You can also use `app.store.state` directly or update several values with `patch()`.
+
+## Lifecycle
+
+GlassKit emits app and navigation lifecycle events such as:
+
+```text
+glasskit:ready
+glasskit:routebeforechange
+glasskit:routechange
+glasskit:pageenter
+glasskit:destroy
+```
+
+Routes can also define `beforeEnter`, `enter` and `leave` callbacks.
+
+## UI system
+
+GlassKit includes the existing reusable iOS/iPadOS component layer:
+
+- compact and regular-width navigation
+- large-title headers
+- tab bars and leading navigation
+- push transitions and edge swipe back
+- safe areas
+- sheets, alerts, menus, popovers and toolbars
+- lists, forms, search and selection controls
+- cards, editorial patterns and horizontal scrollers
+- charts and data presentation
+- Lucide icons
 - semantic light and dark colours
-- stronger web-safe supporting-text contrast
-- current iOS system colour values
-- increased-contrast system colour variants
-- Reduced Motion support
-- Reduced Transparency support
-- forced-colours support
-- keyboard focus containment and restoration
-- large activation areas around visually small controls
-- selected states that do not rely only on colour
-- error states that include text as well as colour
-- browser text scaling and zoom compatibility
-- readable-width long-form content
+- reduced motion and reduced transparency support
+- keyboard, pointer and touch behaviour
+- concentric radius rules
 
-Important supporting text is tuned around accessible contrast requirements instead of using decorative low-opacity grey everywhere.
+The `ios-*` class names remain for backward compatibility and because they describe the platform design primitives. The framework itself is GlassKit.
 
-## Full component template
+## Concentric radii
 
-The reference demo is a catalogue, not a sample landing page. It includes working examples of:
+Nested rounded surfaces follow one rule:
 
-### Typography and content
-
-- Extra Large titles
-- Large Title
-- Title 1, 2, and 3
-- Headline
-- Body
-- Callout
-- Subheadline
-- Footnote
-- Caption and Caption 2
-- primary, secondary, tertiary, and quaternary emphasis
-- readable article copy
-- lead paragraphs
-- quotes with intentional block spacing
-- metadata
-- links
-- inline code
-- truncation and line clamping
-- key/value information
-- persistent callouts
-- rich section headings with subtitles and trailing actions
-
-### Cards and collections
-
-- standard cards
-- elevated cards
-- outlined cards
-- tinted cards
-- accent cards
-- plain cards
-- interactive cards
-- media cards
-- horizontal cards
-- horizontal card scrollers with next-card peeking
-- responsive card grids
-- collection grids
-- horizontal collections
-- Health-style insight and metric cards
-- recommendation/education cards with CTAs and dismiss controls
-- image-led article cards
-- App Store-style editorial hero cards
-- promotional banners
-- media rows
-- avatars
-- status pills
-- content-unavailable states
-
-### Store and catalogue patterns
-
-- horizontally scrolling category chips
-- app/content rows with square artwork
-- title and subtitle hierarchy
-- Get, Open, and download-style trailing actions
-- supporting action notes
-- grouped recommendation list cards
-- editorial sections with disclosure actions
-
-### Lists and hierarchy
-
-- grouped lists
-- value rows
-- disclosure rows
-- selectable rows
-- swipe actions
-- disclosure groups
-- compact navigation hierarchy
-- regular-width split views
-- inspectors
-- data tables
-
-### Forms and controls
-
-- text fields
-- field labels and help text
-- validation and error states
-- multiline text views
-- search fields
-- select and picker fields
-- date and time inputs
-- checkboxes
-- radio choices
-- switches
-- segmented controls
-- sliders
-- steppers
-- tokens and filters
-- buttons in standard, prominent, tinted, plain, and destructive styles
-
-### Status and feedback
-
-- badges
-- status pills
-- determinate progress
-- activity indicators
-- page controls with accessible hit areas
-- skeleton loading states
-- informational messages
-- warnings
-- errors
-- empty/content-unavailable views
-
-### Navigation and presentation
-
-- compact tab bar
-- regular-width leading navigation
-- navigation bars
-- large-to-compact titles
-- toolbars
-- push navigation
-- edge-swipe back
-- pull-down menus
-- context menus
-- alerts
-- source-aware action sheets
-- draggable sheets
-- popovers
-
-## Menus versus pickers
-
-These are different iOS controls and are intentionally not interchangeable.
-
-A pull-down menu presents commands or closely related actions. The framework draws this as an iOS-style rounded transient material surface.
-
-A picker or native select presents a selected value. On iPhone and iPad, a native HTML select is allowed to use Safari's system picker because that gives the closest platform-native interaction available to a webpage. Apps that need a fully controlled cross-platform presentation can use the framework menu primitives instead.
-
-## Split views
-
-A split view is adaptive, not a miniature desktop window.
-
-```html
-<div class="ios-split-view" data-ios-split-view>
-  <aside class="ios-split-view__sidebar">
-    <button data-ios-split-show="recent">Recent</button>
-  </aside>
-
-  <main class="ios-split-view__content">
-    <button data-ios-split-back>Library</button>
-    <div data-ios-split-panel="recent">...</div>
-  </main>
-</div>
+```text
+inner radius = outer radius - inset
 ```
 
-On compact widths the sidebar and detail appear one at a time. Selecting a row pushes into the detail and the back control returns to the sidebar. At regular width both columns are visible simultaneously.
+Do not choose unrelated radii for nested surfaces. `src/radii.css` enforces this across framework components.
 
-## Horizontal cards
+## Repository layout
 
-```html
-<div class="ios-card-scroller ios-card-scroller--peek">
-  <article class="ios-card ios-card--elevated">...</article>
-  <article class="ios-card ios-card--elevated">...</article>
-  <article class="ios-card ios-card--elevated">...</article>
-</div>
+```text
+src/        GlassKit framework source
+demo/       full component and behaviour reference
+starter/    self-contained new-app template
 ```
 
-The scroller supports touch and trackpad scrolling, scroll snapping, safe page margins, a visible next-card peek on compact screens, and a shared aligned row height.
+The main JavaScript entry point is `src/framework.js`. It exports `GlassKitApp`, `GlassKitRouter`, `GlassKitStore` and the lower-level UI modules.
 
-## Design rules
-
-1. Content is the main layer. Glass belongs primarily to navigation and controls.
-2. Use semantic colours instead of hard-coded greys.
-3. Use the system text hierarchy before inventing another font size.
-4. Long-form text uses readable width rather than stretching across a large display.
-5. Cards group related content. Do not put every section in a card.
-6. Tab bars navigate. Toolbars act on the current view.
-7. Keep interactive targets at least 44px.
-8. Preserve context and scroll state.
-9. Familiar gestures behave predictably and never become the only way to perform a critical action.
-10. Reduced Motion, Reduced Transparency, contrast, light/dark appearance, safe areas, pointer, touch, and keyboard behaviour are part of the base system.
-11. Desktop-sized layouts use regular-width Apple patterns instead of a fake macOS window.
-
-## HIG audit
-
-`HIG_AUDIT.md` records the current mapping between Apple's Human Interface Guidelines and the framework, including areas that are compact-only, regular-width-only, shared, or native-only.
-
-Primary references:
-
-- https://developer.apple.com/design/human-interface-guidelines/
-- https://developer.apple.com/design/resources/
-- https://developer.apple.com/documentation/technologyoverviews/liquid-glass
-
-## Demo
-
-From the repository root:
+## Run locally
 
 ```bash
 python -m http.server 4173
 ```
 
-Open `http://localhost:4173/demo/`.
-
-Resize between phone and regular widths and interact with the examples. The demo is the visual and behavioural reference for future apps.
-
-## Files
+Open:
 
 ```text
-src/
-  framework.css       public CSS entry point
-  framework.js        public JavaScript entry point
-  ios.css             shell, controls, navigation, presentations
-  content.css         typography and content containers
-  adaptive.css        collections and compact/regular layouts
-  refinements.css     current colours, spacing, forms, scrollers, mobile split view
-  patterns.css        rich native content, editorial, insight, store, and menu patterns
-  presentations.css   source-aware transient presentation styling
-  accessibility.css   contrast, focus, forced colours, hit-area guarantees
-  ios.js              navigation, gestures, menus, overlays, fallback symbols
-  platform.js         keyboard, pointer, focus, adaptive input behaviour
-  lucide.js           Lucide icon bridge
-  split-view.js       compact/regular split-view behaviour
-  presentations.js    source-aware action presentation behaviour
-
-demo/
-  index.html           reference app shell
-  demo.js              typography and content gallery
-  adaptive-demo.js     adaptive and data examples
-  full-gallery.js      full reusable component catalogue
-  native-patterns.js   Health/App Store-style reusable pattern catalogue
-
-HIG_AUDIT.md           Apple HIG implementation map
+http://localhost:4173/starter/
+http://localhost:4173/demo/
 ```
 
-Future apps should start from these primitives and behaviours instead of rebuilding basic iOS interaction and layout rules screen by screen.
+Use `starter/` to build apps. Use `demo/` only as the component reference.
