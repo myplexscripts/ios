@@ -1,5 +1,6 @@
 import { renderLucide } from '../src/framework.js';
 import './full-gallery.js';
+import './component-router-demo.js';
 
 const adaptiveGallery = `
   <section class="ios-section" data-adaptive-gallery>
