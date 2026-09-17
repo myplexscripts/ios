@@ -6,7 +6,7 @@ export const GLASSKIT_VERSION = '1.0.0';
 
 export class GlassKitApp extends IOSApp {
   constructor(options = {}) {
-    if (options instanceof Element || typeof options === 'string') options = { root: options };
+    if ((typeof Element !== 'undefined' && options instanceof Element) || typeof options === 'string') options = { root: options };
     const root = options.root || document.querySelector('[data-glasskit-app]') || document.querySelector('[data-ios-app]');
     super(root);
 
@@ -73,6 +73,18 @@ export class GlassKitApp extends IOSApp {
       this.router.back();
       return Promise.resolve(true);
     }
+    return super.back();
+  }
+
+  transitionToTab(name, animate = true) {
+    return super.selectTab(name, animate);
+  }
+
+  transitionPush(name) {
+    return super.push(name);
+  }
+
+  transitionBack() {
     return super.back();
   }
 
