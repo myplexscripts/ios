@@ -1,0 +1,6 @@
+{
+  "framework": "GlassKit",
+  "version": "1.2.0",
+  "status": "ready",
+  "features": ["request", "storage", "plugins", "virtual-list"]
+}
