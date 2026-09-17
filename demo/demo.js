@@ -1,7 +1,89 @@
-import { renderLucide } from '../src/framework.js';
-import './adaptive-demo.js';
-import './native-patterns.js';
-import './charts.js';
+const root = document.querySelector('#demoApp');
+root?.removeAttribute('data-ios-app');
+root?.setAttribute('data-glasskit-app', '');
+
+document.title = 'GlassKit Demo';
+
+const { GlassKitApp, GLASSKIT_VERSION, renderLucide } = await import('../src/framework.js');
+await Promise.all([
+  import('./adaptive-demo.js'),
+  import('./native-patterns.js'),
+  import('./charts.js')
+]);
+
+export const demoApp = new GlassKitApp({
+  root: '#demoApp',
+  name: 'GlassKit Demo',
+  router: {
+    mode: 'hash',
+    defaultRoute: '/components'
+  },
+  routes: [
+    { path: '/components', tab: 'components' },
+    { path: '/patterns', tab: 'patterns' },
+    { path: '/settings', tab: 'settings' },
+    { path: '/detail', screen: 'detail' },
+    { path: '/detail/:id', screen: 'detail' },
+    { path: '*', redirect: '/components' }
+  ],
+  store: {
+    demoCount: 0
+  }
+}).init();
+
+const glassKitGallery = `
+  <section class="ios-section" data-glasskit-runtime-demo>
+    <div class="ios-section-heading">
+      <div class="ios-section-heading__copy">
+        <h2 class="ios-section-heading__title">GlassKit Runtime</h2>
+        <div class="ios-section-heading__subtitle">The demo itself is running on GlassKitApp.</div>
+      </div>
+      <span class="ios-badge">v${GLASSKIT_VERSION}</span>
+    </div>
+
+    <div class="ios-card ios-stack" style="gap:16px">
+      <div class="ios-key-value-list">
+        <div class="ios-key-value"><span class="ios-key-value__key">Current route</span><span class="ios-key-value__value ios-text-tabular" data-glasskit-current-route>/components</span></div>
+        <div class="ios-key-value"><span class="ios-key-value__key">App instance</span><span class="ios-key-value__value">GlassKitApp</span></div>
+        <div class="ios-key-value"><span class="ios-key-value__key">Router</span><span class="ios-key-value__value">Hash + browser history</span></div>
+      </div>
+
+      <div class="ios-hstack" style="gap:12px">
+        <div>
+          <div class="ios-headline">Shared store</div>
+          <div class="ios-subheadline ios-secondary">Reactive state shared across the app.</div>
+        </div>
+        <span class="ios-spacer"></span>
+        <div class="ios-stepper" aria-label="GlassKit store counter">
+          <button type="button" data-glasskit-store-step="-1" aria-label="Decrease"><span data-ios-symbol="minus"></span></button>
+          <span class="ios-stepper__value" data-glasskit-store-value>0</span>
+          <button type="button" data-glasskit-store-step="1" aria-label="Increase"><span data-ios-symbol="plus"></span></button>
+        </div>
+      </div>
+
+      <div class="ios-divider"></div>
+
+      <div class="ios-text-stack" style="gap:10px">
+        <div class="ios-headline">Routed navigation</div>
+        <div class="ios-subheadline ios-secondary">These use GlassKitRouter rather than manually swapping panels.</div>
+        <div class="ios-button-row">
+          <button class="ios-button ios-button--tinted" type="button" data-glasskit-link="/components">Components</button>
+          <button class="ios-button ios-button--tinted" type="button" data-glasskit-link="/settings">Settings</button>
+          <button class="ios-button ios-button--prominent" type="button" data-glasskit-link="/detail/runtime-demo">Parameterized Route</button>
+        </div>
+      </div>
+
+      <div class="ios-callout-box">
+        <div class="ios-callout-box__icon"><span data-ios-symbol="info"></span></div>
+        <div class="ios-callout-box__content">
+          <div class="ios-callout-box__title">Lifecycle</div>
+          <div class="ios-callout-box__message" data-glasskit-last-event>Waiting for the next route change.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ios-section__footer">Change tabs, use Back/Forward, or open the parameterized route and watch the URL and lifecycle state update.</div>
+  </section>
+`;
 
 const contentGallery = `
   <section class="ios-section">
@@ -42,7 +124,7 @@ const contentGallery = `
     <div class="ios-section__header">Supporting Content</div>
     <div class="ios-stack">
       <div class="ios-callout-box"><div class="ios-callout-box__icon"><span data-ios-symbol="info"></span></div><div class="ios-callout-box__content"><div class="ios-callout-box__title">Helpful information</div><div class="ios-callout-box__message">Use a callout for context that should remain visible with the content.</div></div></div>
-      <div class="ios-key-value-list"><div class="ios-key-value"><span class="ios-key-value__key">Created</span><span class="ios-key-value__value">September 16</span></div><div class="ios-key-value"><span class="ios-key-value__key">Status</span><span class="ios-key-value__value ios-text-success">Available</span></div><div class="ios-key-value"><span class="ios-key-value__key">Version</span><span class="ios-key-value__value ios-text-tabular">0.4</span></div></div>
+      <div class="ios-key-value-list"><div class="ios-key-value"><span class="ios-key-value__key">Created</span><span class="ios-key-value__value">September 17</span></div><div class="ios-key-value"><span class="ios-key-value__key">Status</span><span class="ios-key-value__value ios-text-success">Available</span></div><div class="ios-key-value"><span class="ios-key-value__key">Version</span><span class="ios-key-value__value ios-text-tabular">${GLASSKIT_VERSION}</span></div></div>
     </div>
   </section>
 `;
@@ -57,7 +139,42 @@ function ready() {
     searchSection.insertAdjacentElement('afterend', wrapper);
   }
 
+  const patterns = document.querySelector('[data-ios-tab-panel="patterns"] .ios-content');
+  const patternsTitle = patterns?.querySelector('.ios-large-title');
+  if (patternsTitle && !patterns.querySelector('[data-glasskit-runtime-demo]')) {
+    patternsTitle.insertAdjacentHTML('afterend', glassKitGallery);
+  }
+
   renderLucide(document);
+
+  const routeOutput = document.querySelector('[data-glasskit-current-route]');
+  const eventOutput = document.querySelector('[data-glasskit-last-event]');
+  const storeOutput = document.querySelector('[data-glasskit-store-value]');
+
+  const syncRoute = route => {
+    if (routeOutput) routeOutput.textContent = route?.path || demoApp.router.current?.path || '/components';
+  };
+  syncRoute(demoApp.router.current);
+
+  demoApp.on('routebeforechange', event => {
+    const to = event.detail.to;
+    if (eventOutput) eventOutput.textContent = `pagebeforeenter → ${to?.path || 'unknown'}`;
+  });
+  demoApp.on('routechange', event => {
+    const to = event.detail.to;
+    syncRoute(to);
+    if (eventOutput) eventOutput.textContent = `pageenter → ${to?.path || 'unknown'}`;
+  });
+
+  demoApp.store.subscribe('demoCount', value => {
+    if (storeOutput) storeOutput.textContent = String(value ?? 0);
+  }, { immediate: true });
+
+  document.querySelectorAll('[data-glasskit-store-step]').forEach(button => {
+    button.addEventListener('click', () => {
+      demoApp.store.update('demoCount', current => (Number(current) || 0) + Number(button.dataset.glasskitStoreStep));
+    });
+  });
 
   const deleteButton = document.querySelector('#demoDelete');
   deleteButton?.addEventListener('click', () => {
