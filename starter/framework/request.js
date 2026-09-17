@@ -122,7 +122,11 @@ export class GlassKitRequest {
     let timer = null;
     if (timeout > 0) timer = setTimeout(() => controller.abort(new DOMException('Request timed out', 'TimeoutError')), timeout);
 
-    const init = { method: options.method, headers: { ...options.headers }, signal: controller.signal };
+    const init = {
+      method: options.method,
+      headers: { ...options.headers },
+      signal: controller.signal
+    };
     if (options.credentials ?? this.credentials) init.credentials = options.credentials ?? this.credentials;
     if (options.mode) init.mode = options.mode;
     if (options.cacheMode) init.cache = options.cacheMode;
@@ -142,11 +146,28 @@ export class GlassKitRequest {
     try {
       const response = await fetch(url, init);
       let data;
-      try { data = await this.parseResponse(response, options.responseType || 'auto'); }
-      catch (error) {
-        throw new GlassKitRequestError('Unable to parse server response', { cause: error, status: response.status, statusText: response.statusText, url, response, code: 'PARSE_ERROR' });
+      try {
+        data = await this.parseResponse(response, options.responseType || 'auto');
+      } catch (error) {
+        throw new GlassKitRequestError('Unable to parse server response', {
+          cause: error,
+          status: response.status,
+          statusText: response.statusText,
+          url,
+          response,
+          code: 'PARSE_ERROR'
+        });
       }
-      if (!response.ok) throw new GlassKitRequestError(`Request failed with ${response.status}`, { status: response.status, statusText: response.statusText, url, data, response });
+
+      if (!response.ok) {
+        throw new GlassKitRequestError(`Request failed with ${response.status}`, {
+          status: response.status,
+          statusText: response.statusText,
+          url,
+          data,
+          response
+        });
+      }
       return data;
     } catch (error) {
       if (error instanceof GlassKitRequestError) throw error;
@@ -169,4 +190,6 @@ export class GlassKitRequest {
   delete(url, options = {}) { return this.request(url, { ...options, method: 'DELETE' }); }
 }
 
-export function createRequest(options = {}) { return new GlassKitRequest(options); }
+export function createRequest(options = {}) {
+  return new GlassKitRequest(options);
+}
