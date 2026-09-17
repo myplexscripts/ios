@@ -5,14 +5,23 @@ function normalisePlugin(plugin) {
 }
 
 export class GlassKitPluginManager {
-  constructor(app) { this.app = app; this.records = new Map(); }
-  has(name) { return this.records.has(name); }
+  constructor(app) {
+    this.app = app;
+    this.records = new Map();
+  }
+
+  has(name) {
+    return this.records.has(name);
+  }
+
   async use(plugin, options = {}) {
     const definition = normalisePlugin(plugin);
     const name = definition.name || `plugin-${this.records.size + 1}`;
     if (this.records.has(name)) return this.records.get(name).api;
+
     const record = { name, definition, options, cleanup: null, api: null, initialized: false };
     this.records.set(name, record);
+
     try {
       const installed = await definition.install?.(this.app, options);
       if (typeof installed === 'function') record.cleanup = installed;
@@ -24,6 +33,7 @@ export class GlassKitPluginManager {
       throw error;
     }
   }
+
   async init() {
     for (const record of this.records.values()) {
       if (record.initialized) continue;
@@ -31,6 +41,7 @@ export class GlassKitPluginManager {
       record.initialized = true;
     }
   }
+
   async destroy() {
     const records = [...this.records.values()].reverse();
     for (const record of records) {
@@ -41,4 +52,6 @@ export class GlassKitPluginManager {
   }
 }
 
-export function definePlugin(plugin) { return normalisePlugin(plugin); }
+export function definePlugin(plugin) {
+  return normalisePlugin(plugin);
+}
