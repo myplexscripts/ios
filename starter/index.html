@@ -8,14 +8,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>App Name</title>
-
   <link rel="stylesheet" href="./framework/framework.css">
   <link rel="stylesheet" href="./app.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
-  <main class="ios-app" data-ios-app>
-    <!-- HOME -->
+  <main class="ios-app" data-ios-app data-glasskit-app>
     <section class="ios-tab-panel" data-ios-tab-panel="home" tabindex="-1">
       <header class="ios-navigation-bar">
         <div class="ios-navigation-bar__row">
@@ -39,22 +37,21 @@
             <div class="ios-section-heading">
               <div class="ios-section-heading__copy">
                 <h2 class="ios-section-heading__title">Welcome</h2>
-                <div class="ios-section-heading__subtitle">Replace this content with your app.</div>
+                <div class="ios-section-heading__subtitle">This is the clean GlassKit app starter.</div>
               </div>
             </div>
-
             <article class="ios-card ios-card--elevated starter-feature-card">
               <div class="ios-card__header">
                 <div>
-                  <h3 class="ios-card__title">Starter card</h3>
-                  <p class="ios-card__subtitle">The framework handles the layout, appearance and interaction rules.</p>
+                  <h3 class="ios-card__title">App content</h3>
+                  <p class="ios-card__subtitle">Replace the starter content while keeping the framework underneath it.</p>
                 </div>
               </div>
               <div class="ios-card__body">
-                <p class="ios-paragraph">Build your app from the existing primitives instead of rebuilding navigation, controls, spacing, radii and adaptive behaviour.</p>
+                <p class="ios-paragraph">GlassKit owns navigation, routing, shared state, controls, adaptive layout, accessibility and platform behaviour.</p>
               </div>
               <div class="ios-card__actions">
-                <button class="ios-button ios-button--prominent" type="button" data-ios-push="detail">Open Detail</button>
+                <button class="ios-button ios-button--prominent" type="button" data-glasskit-link="/detail/getting-started">Open Detail</button>
                 <button class="ios-button ios-button--tinted" type="button" data-ios-present="starter-sheet">Open Sheet</button>
               </div>
             </article>
@@ -64,25 +61,24 @@
             <div class="ios-section-heading">
               <div class="ios-section-heading__copy">
                 <h2 class="ios-section-heading__title">Featured</h2>
-                <div class="ios-section-heading__subtitle">Horizontal content is already wired for touch and trackpads.</div>
+                <div class="ios-section-heading__subtitle">Horizontal content works with touch, mouse and trackpads.</div>
               </div>
             </div>
-
             <div class="ios-card-scroller ios-card-scroller--peek" aria-label="Featured items">
               <article class="ios-card ios-scroll-card">
                 <div class="starter-placeholder-media"><span data-ios-symbol="star"></span></div>
                 <h3 class="ios-card__title">First item</h3>
-                <p class="ios-card__subtitle">Replace with your own card content.</p>
+                <p class="ios-card__subtitle">Replace this with your content.</p>
               </article>
               <article class="ios-card ios-scroll-card">
                 <div class="starter-placeholder-media"><span data-ios-symbol="bookmark"></span></div>
                 <h3 class="ios-card__title">Second item</h3>
-                <p class="ios-card__subtitle">Cards keep a consistent shared row.</p>
+                <p class="ios-card__subtitle">The framework keeps the layout consistent.</p>
               </article>
               <article class="ios-card ios-scroll-card">
                 <div class="starter-placeholder-media"><span data-ios-symbol="image"></span></div>
                 <h3 class="ios-card__title">Third item</h3>
-                <p class="ios-card__subtitle">Use images, charts, actions or ordinary copy.</p>
+                <p class="ios-card__subtitle">Cards can contain media, charts or actions.</p>
               </article>
             </div>
           </section>
@@ -90,20 +86,14 @@
           <section class="ios-section">
             <div class="ios-section__header">Quick Actions</div>
             <div class="ios-list">
-              <button class="ios-row ios-row--disclosure" type="button" data-ios-push="detail">
+              <button class="ios-row ios-row--disclosure" type="button" data-glasskit-link="/detail/quick-action">
                 <span class="ios-row__icon"><span data-ios-symbol="document"></span></span>
-                <span class="ios-row__body">
-                  <span class="ios-row__title">Detail screen</span>
-                  <span class="ios-row__subtitle">Push navigation with swipe back</span>
-                </span>
+                <span class="ios-row__body"><span class="ios-row__title">Routed detail</span><span class="ios-row__subtitle">URL, history and route parameters</span></span>
                 <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
               </button>
               <button class="ios-row ios-row--disclosure" type="button" data-ios-present="starter-sheet">
                 <span class="ios-row__icon" style="background:var(--ios-purple)"><span data-ios-symbol="sliders"></span></span>
-                <span class="ios-row__body">
-                  <span class="ios-row__title">Sheet</span>
-                  <span class="ios-row__subtitle">A focused modal task</span>
-                </span>
+                <span class="ios-row__body"><span class="ios-row__title">Sheet</span><span class="ios-row__subtitle">A focused modal task</span></span>
                 <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
               </button>
             </div>
@@ -112,7 +102,6 @@
       </div>
     </section>
 
-    <!-- LIBRARY / LIST SCREEN -->
     <section class="ios-tab-panel" data-ios-tab-panel="library" tabindex="-1" hidden>
       <header class="ios-navigation-bar">
         <div class="ios-navigation-bar__row">
@@ -120,52 +109,36 @@
           <div class="ios-navigation-bar__title">Library</div>
           <div class="ios-navigation-bar__trailing">
             <div class="ios-glass-group">
-              <button class="ios-bar-button ios-bar-button--icon" type="button" aria-label="Add item" data-ios-present="starter-sheet">
-                <span data-ios-symbol="plus"></span>
-              </button>
+              <button class="ios-bar-button ios-bar-button--icon" type="button" data-ios-present="starter-sheet" aria-label="Add item"><span data-ios-symbol="plus"></span></button>
             </div>
           </div>
         </div>
       </header>
-
       <div class="ios-scroll" data-ios-tabbar-minimize>
         <div class="ios-content">
           <h1 class="ios-large-title">Library</h1>
-
           <section class="ios-section">
             <label class="ios-search-field">
               <span data-ios-symbol="search"></span>
               <input id="starterSearch" type="search" placeholder="Search" autocomplete="off" aria-label="Search library">
-              <button class="ios-search-field__clear" type="button" data-ios-clear aria-label="Clear search">
-                <span data-ios-symbol="xmark"></span>
-              </button>
+              <button class="ios-search-field__clear" type="button" data-ios-clear aria-label="Clear search"><span data-ios-symbol="xmark"></span></button>
             </label>
           </section>
-
           <section class="ios-section">
             <div class="ios-list" id="starterList">
-              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="saved item example" data-ios-push="detail">
-                <span class="ios-row__icon" style="background:var(--ios-blue)"><span data-ios-symbol="bookmark"></span></span>
-                <span class="ios-row__body">
-                  <span class="ios-row__title">Saved Item</span>
-                  <span class="ios-row__subtitle">Example list destination</span>
-                </span>
+              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="saved item example" data-glasskit-link="/detail/saved-item">
+                <span class="ios-row__icon"><span data-ios-symbol="bookmark"></span></span>
+                <span class="ios-row__body"><span class="ios-row__title">Saved Item</span><span class="ios-row__subtitle">Dynamic route example</span></span>
                 <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
               </button>
-              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="recent item example" data-ios-push="detail">
+              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="recent item example" data-glasskit-link="/detail/recent-item">
                 <span class="ios-row__icon" style="background:var(--ios-green)"><span data-ios-symbol="clock"></span></span>
-                <span class="ios-row__body">
-                  <span class="ios-row__title">Recent Item</span>
-                  <span class="ios-row__subtitle">Another reusable row</span>
-                </span>
+                <span class="ios-row__body"><span class="ios-row__title">Recent Item</span><span class="ios-row__subtitle">Another reusable row</span></span>
                 <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
               </button>
-              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="collection folder example" data-ios-push="detail">
+              <button class="ios-row ios-row--disclosure" type="button" data-starter-search="collection folder example" data-glasskit-link="/detail/collection">
                 <span class="ios-row__icon" style="background:var(--ios-orange)"><span data-ios-symbol="folder"></span></span>
-                <span class="ios-row__body">
-                  <span class="ios-row__title">Collection</span>
-                  <span class="ios-row__subtitle">Grouped content example</span>
-                </span>
+                <span class="ios-row__body"><span class="ios-row__title">Collection</span><span class="ios-row__subtitle">Grouped content example</span></span>
                 <span class="ios-row__chevron"><span data-ios-symbol="chevronRight"></span></span>
               </button>
             </div>
@@ -181,7 +154,6 @@
       </div>
     </section>
 
-    <!-- SETTINGS / FORM SCREEN -->
     <section class="ios-tab-panel" data-ios-tab-panel="settings" tabindex="-1" hidden>
       <header class="ios-navigation-bar">
         <div class="ios-navigation-bar__row">
@@ -190,11 +162,9 @@
           <div class="ios-navigation-bar__trailing"></div>
         </div>
       </header>
-
       <div class="ios-scroll" data-ios-tabbar-minimize>
         <div class="ios-content">
           <h1 class="ios-large-title">Settings</h1>
-
           <section class="ios-section">
             <div class="ios-section__header">General</div>
             <div class="ios-list">
@@ -203,7 +173,7 @@
                 <span class="ios-row__body"><span class="ios-row__title">Notifications</span></span>
                 <span class="ios-switch"><input type="checkbox" checked><span class="ios-switch__track"></span></span>
               </label>
-              <button class="ios-row ios-row--disclosure" type="button" data-ios-push="detail">
+              <button class="ios-row ios-row--disclosure" type="button" data-glasskit-link="/detail/preferences">
                 <span class="ios-row__icon" style="background:var(--ios-indigo)"><span data-ios-symbol="sliders"></span></span>
                 <span class="ios-row__body"><span class="ios-row__title">Preferences</span></span>
                 <span class="ios-row__value">Automatic</span>
@@ -211,20 +181,12 @@
               </button>
             </div>
           </section>
-
           <section class="ios-section">
             <div class="ios-section__header">Example Form</div>
             <div class="ios-card">
               <div class="ios-form-group">
-                <label class="ios-field">
-                  <span class="ios-field__label">Name</span>
-                  <span class="ios-text-field"><input type="text" value="App Name" autocomplete="off"></span>
-                  <span class="ios-field__help">Use framework fields instead of inventing a new form style.</span>
-                </label>
-                <label class="ios-field">
-                  <span class="ios-field__label">Notes</span>
-                  <textarea class="ios-text-view" placeholder="Add notes"></textarea>
-                </label>
+                <label class="ios-field"><span class="ios-field__label">Name</span><span class="ios-text-field"><input type="text" value="App Name" autocomplete="off"></span></label>
+                <label class="ios-field"><span class="ios-field__label">Notes</span><textarea class="ios-text-view" placeholder="Add notes"></textarea></label>
                 <button class="ios-button ios-button--prominent ios-button--block" type="button">Save</button>
               </div>
             </div>
@@ -233,15 +195,12 @@
       </div>
     </section>
 
-    <!-- PUSH DESTINATION -->
     <section class="ios-push-screen" data-ios-screen="detail" tabindex="-1" hidden>
       <header class="ios-navigation-bar is-scrolled">
         <div class="ios-navigation-bar__row">
           <div class="ios-navigation-bar__leading">
             <div class="ios-glass-group">
-              <button class="ios-bar-button" type="button" data-ios-back>
-                <span data-ios-symbol="chevronLeft"></span><span>Back</span>
-              </button>
+              <button class="ios-bar-button" type="button" data-ios-back><span data-ios-symbol="chevronLeft"></span><span>Back</span></button>
             </div>
           </div>
           <div class="ios-navigation-bar__title" style="opacity:1;transform:none">Detail</div>
@@ -250,44 +209,31 @@
       </header>
       <div class="ios-scroll">
         <div class="ios-content">
-          <h1 class="ios-large-title">Detail</h1>
+          <h1 class="ios-large-title" data-starter-detail-title>Detail</h1>
           <section class="ios-section">
             <article class="ios-card">
-              <h2 class="ios-title-2">Replace this screen</h2>
-              <p class="ios-paragraph ios-paragraph--secondary starter-detail-copy">This is a ready-to-use pushed destination. Browser history, the Back button and left-edge swipe are handled by the framework.</p>
+              <h2 class="ios-title-2">Routed destination</h2>
+              <p class="ios-paragraph ios-paragraph--secondary starter-detail-copy">This screen can be opened directly by URL, receives route parameters, participates in browser history, and still uses the native-feeling GlassKit transition.</p>
             </article>
           </section>
         </div>
       </div>
     </section>
 
-    <!-- TOP LEVEL NAVIGATION -->
     <div class="ios-tabbar-wrap">
       <nav class="ios-tabbar" aria-label="Primary navigation">
-        <button class="ios-tabbar__item" type="button" data-ios-tab="home" aria-selected="true">
-          <span data-ios-symbol="house"></span><span>Home</span>
-        </button>
-        <button class="ios-tabbar__item" type="button" data-ios-tab="library" aria-selected="false">
-          <span data-ios-symbol="folder"></span><span>Library</span>
-        </button>
-        <button class="ios-tabbar__item" type="button" data-ios-tab="settings" aria-selected="false">
-          <span data-ios-symbol="gear"></span><span>Settings</span>
-        </button>
+        <button class="ios-tabbar__item" type="button" data-ios-tab="home" aria-selected="true"><span data-ios-symbol="house"></span><span>Home</span></button>
+        <button class="ios-tabbar__item" type="button" data-ios-tab="library" aria-selected="false"><span data-ios-symbol="folder"></span><span>Library</span></button>
+        <button class="ios-tabbar__item" type="button" data-ios-tab="settings" aria-selected="false"><span data-ios-symbol="gear"></span><span>Settings</span></button>
       </nav>
     </div>
   </main>
 
-  <!-- MENU -->
   <div class="ios-menu" data-ios-menu="home-menu" hidden>
-    <button class="ios-menu__item" type="button" data-ios-present="starter-sheet">
-      <span>New Item</span><span data-ios-symbol="plus"></span>
-    </button>
-    <button class="ios-menu__item" type="button">
-      <span>Share</span><span data-ios-symbol="share"></span>
-    </button>
+    <button class="ios-menu__item" type="button" data-ios-present="starter-sheet"><span>New Item</span><span data-ios-symbol="plus"></span></button>
+    <button class="ios-menu__item" type="button"><span>Share</span><span data-ios-symbol="share"></span></button>
   </div>
 
-  <!-- SHEET -->
   <div class="ios-overlay" data-ios-overlay="starter-sheet" hidden>
     <section class="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="starterSheetTitle">
       <div class="ios-sheet__grabber" data-ios-sheet-handle></div>
@@ -298,14 +244,8 @@
       </header>
       <div class="ios-sheet__body">
         <div class="ios-form-group">
-          <label class="ios-field">
-            <span class="ios-field__label">Title</span>
-            <span class="ios-text-field"><input type="text" placeholder="Title" autocomplete="off"></span>
-          </label>
-          <label class="ios-field">
-            <span class="ios-field__label">Notes</span>
-            <textarea class="ios-text-view" placeholder="Optional notes"></textarea>
-          </label>
+          <label class="ios-field"><span class="ios-field__label">Title</span><span class="ios-text-field"><input type="text" placeholder="Title" autocomplete="off"></span></label>
+          <label class="ios-field"><span class="ios-field__label">Notes</span><textarea class="ios-text-view" placeholder="Optional notes"></textarea></label>
         </div>
       </div>
     </section>
