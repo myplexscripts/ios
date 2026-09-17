@@ -78,7 +78,9 @@ export class GlassKitApp extends IOSApp {
     return this;
   }
 
-  whenReady() { return this.readyPromise; }
+  whenReady() {
+    return this.readyPromise;
+  }
 
   emit(name, detail = {}) {
     const eventName = name.startsWith('glasskit:') ? name : `glasskit:${name}`;
@@ -167,9 +169,17 @@ export class GlassKitApp extends IOSApp {
     return super.back();
   }
 
-  transitionToTab(name, animate = true) { return super.selectTab(name, animate); }
-  transitionPush(name) { return super.push(name); }
-  transitionBack() { return super.back(); }
+  transitionToTab(name, animate = true) {
+    return super.selectTab(name, animate);
+  }
+
+  transitionPush(name) {
+    return super.push(name);
+  }
+
+  transitionBack() {
+    return super.back();
+  }
 
   navigate(target, options = {}) {
     return this.router.navigate(target, options).catch(error => {
@@ -197,4 +207,6 @@ export class GlassKitApp extends IOSApp {
   }
 }
 
-export function createGlassKitApp(options = {}) { return new GlassKitApp(options).init(); }
+export function createGlassKitApp(options = {}) {
+  return new GlassKitApp(options).init();
+}
