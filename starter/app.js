@@ -13,14 +13,13 @@ export const app = new GlassKitApp({
     { path: '/settings', tab: 'settings' },
     {
       path: '/detail/:id',
-      tab: 'home',
       screen: 'detail',
       enter({ params }) {
         const title = document.querySelector('[data-starter-detail-title]');
         if (title) title.textContent = params.id.replace(/[-_]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
       }
     },
-    { path: '/detail', tab: 'home', screen: 'detail' },
+    { path: '/detail', screen: 'detail' },
     { path: '*', redirect: '/' }
   ],
   store: {
