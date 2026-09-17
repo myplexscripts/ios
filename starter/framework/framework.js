@@ -5,5 +5,6 @@ export * from './split-view.js';
 export * from './presentations.js';
 export * from './behavior.js';
 export * from './store.js';
+export * from './component.js';
 export * from './router.js';
 export * from './app.js';
