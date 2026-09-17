@@ -1,11 +1,14 @@
 {
-  "name": "@myplexscripts/ios-web",
-  "version": "0.6.0",
-  "description": "HIG-aligned adaptive iOS and iPadOS web design, interaction framework, and reusable starter template.",
+  "name": "@myplexscripts/glasskit",
+  "version": "1.0.0",
+  "description": "GlassKit: an opinionated adaptive iOS and iPadOS web application framework and starter template.",
   "type": "module",
   "main": "./src/framework.js",
   "exports": {
     ".": "./src/framework.js",
+    "./app": "./src/app.js",
+    "./router": "./src/router.js",
+    "./store": "./src/store.js",
     "./core": "./src/ios.js",
     "./platform": "./src/platform.js",
     "./lucide": "./src/lucide.js",
@@ -26,20 +29,23 @@
     "src",
     "starter",
     "README.md",
+    "START_HERE.md",
     "HIG_AUDIT.md"
   ],
   "scripts": {
-    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/behavior.js && node --check src/framework.js && node --check starter/app.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node --check demo/charts.js && node tools/contrast-check.mjs",
+    "check": "node --check src/ios.js && node --check src/platform.js && node --check src/lucide.js && node --check src/split-view.js && node --check src/presentations.js && node --check src/behavior.js && node --check src/store.js && node --check src/router.js && node --check src/app.js && node --check src/framework.js && node --check starter/app.js && node --check starter/framework/store.js && node --check starter/framework/router.js && node --check starter/framework/app.js && node --check demo/demo.js && node --check demo/adaptive-demo.js && node --check demo/full-gallery.js && node --check demo/native-patterns.js && node --check demo/charts.js && node tools/contrast-check.mjs",
     "serve": "python -m http.server 4173"
   },
   "keywords": [
+    "glasskit",
     "ios",
     "ipados",
     "human-interface-guidelines",
     "design-system",
     "web-app",
+    "app-framework",
+    "router",
     "starter-template",
-    "gestures",
     "mobile",
     "adaptive",
     "lucide"
