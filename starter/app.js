@@ -1,28 +1,25 @@
 const root = document.querySelector('[data-glasskit-app]');
 root?.removeAttribute('data-ios-app');
 
-const { GlassKitApp } = await import('./framework/framework.js');
+const [{ GlassKitApp }, { ItemDetail }] = await Promise.all([
+  import('./framework/framework.js'),
+  import('./components/item-detail.js')
+]);
 
 export const app = new GlassKitApp({
   root: '[data-glasskit-app]',
   name: 'App Name',
   router: {
     mode: 'hash',
-    defaultRoute: '/'
+    defaultRoute: '/',
+    componentCacheSize: 12
   },
   routes: [
-    { path: '/', tab: 'home' },
-    { path: '/library', tab: 'library' },
-    { path: '/settings', tab: 'settings' },
-    {
-      path: '/detail/:id',
-      screen: 'detail',
-      enter({ params }) {
-        const title = document.querySelector('[data-starter-detail-title]');
-        if (title) title.textContent = params.id.replace(/[-_]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
-      }
-    },
-    { path: '/detail', screen: 'detail' },
+    { name: 'home', path: '/', tab: 'home' },
+    { name: 'library', path: '/library', tab: 'library' },
+    { name: 'settings', path: '/settings', tab: 'settings' },
+    { name: 'item', path: '/item/:id', tab: 'library', component: ItemDetail },
+    { name: 'detail', path: '/detail', screen: 'detail' },
     { path: '*', redirect: '/' }
   ],
   store: {
@@ -33,6 +30,13 @@ export const app = new GlassKitApp({
 const search = document.querySelector('#starterSearch');
 const rows = [...document.querySelectorAll('#starterList [data-starter-search]')];
 const noResults = document.querySelector('#starterNoResults');
+
+rows.forEach((row, index) => {
+  const label = row.querySelector('.ios-row__title')?.textContent?.trim() || `item-${index + 1}`;
+  const id = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  row.removeAttribute('data-ios-push');
+  row.setAttribute('data-glasskit-link', `/item/${encodeURIComponent(id)}`);
+});
 
 function filterLibrary() {
   if (!search) return;
