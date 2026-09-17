@@ -110,6 +110,10 @@ function installRuntimeRoute() {
   route.cacheData = true;
   app.router.namedRoutes.set(route.name, route);
 
+  if (app.router.current?.path?.startsWith('/detail/')) {
+    app.router.navigate(app.router.current.path, { replace: true, force: true });
+  }
+
   const addExplanation = () => {
     const runtime = document.querySelector('[data-glasskit-runtime-demo]');
     if (!runtime) {
