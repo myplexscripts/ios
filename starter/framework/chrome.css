@@ -18,6 +18,7 @@
     padding-top: calc(var(--ios-safe-top) + var(--glasskit-navigation-top-inset));
   }
 
+  /* Keep the large-title region aligned with the taller compact chrome. */
   .ios-tab-panel > .ios-scroll {
     padding-top: calc(var(--ios-safe-top) + 58px);
   }
