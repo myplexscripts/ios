@@ -1,8 +1,10 @@
 import { IOSApp } from './ios.js';
 import { GlassKitRouter } from './router.js';
 import { GlassKitStore } from './store.js';
+import { initIOSBehaviorRefinements, enhanceIOSBehavior } from './behavior.js';
+import { renderLucide } from './lucide.js';
 
-export const GLASSKIT_VERSION = '1.0.0';
+export const GLASSKIT_VERSION = '1.1.0';
 
 export class GlassKitApp extends IOSApp {
   constructor(options = {}) {
@@ -16,7 +18,8 @@ export class GlassKitApp extends IOSApp {
     this.router = new GlassKitRouter(this, {
       routes: options.routes || [],
       mode: options.router?.mode || options.routerMode || 'hash',
-      defaultRoute: options.router?.defaultRoute || options.defaultRoute
+      defaultRoute: options.router?.defaultRoute || options.defaultRoute,
+      componentCacheSize: options.router?.componentCacheSize
     });
     this.initialized = false;
 
@@ -28,9 +31,10 @@ export class GlassKitApp extends IOSApp {
   init() {
     if (this.initialized) return this;
     super.init();
+    initIOSBehaviorRefinements(this.root);
     this.router.init();
     this.initialized = true;
-    this.emit('ready', { app: this });
+    this.router.whenReady().then(() => this.emit('ready', { app: this }));
     return this;
   }
 
@@ -47,6 +51,34 @@ export class GlassKitApp extends IOSApp {
     const eventName = name.startsWith('glasskit:') ? name : `glasskit:${name}`;
     this.root.addEventListener(eventName, listener, options);
     return () => this.root.removeEventListener(eventName, listener, options);
+  }
+
+  enhance(scope = this.root) {
+    enhanceIOSBehavior(this.root, scope);
+    renderLucide(scope);
+    this.enhanceSearchFields(scope);
+    return scope;
+  }
+
+  enhanceSearchFields(scope) {
+    const fields = [];
+    if (scope.matches?.('.ios-search-field')) fields.push(scope);
+    scope.querySelectorAll?.('.ios-search-field').forEach(field => fields.push(field));
+    fields.forEach(field => {
+      if (field.dataset.glasskitSearchBound === 'true') return;
+      const input = field.querySelector('input');
+      const clear = field.querySelector('[data-ios-clear]');
+      if (!input || !clear) return;
+      field.dataset.glasskitSearchBound = 'true';
+      const sync = () => clear.toggleAttribute('hidden', input.value.length === 0);
+      input.addEventListener('input', sync);
+      clear.addEventListener('click', () => {
+        input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+      });
+      sync();
+    });
   }
 
   selectTab(name, animate = true) {
@@ -88,16 +120,16 @@ export class GlassKitApp extends IOSApp {
     return super.back();
   }
 
-  navigate(path, options = {}) {
-    return this.router.navigate(path, options);
+  navigate(target, options = {}) {
+    return this.router.navigate(target, options);
   }
 
-  replace(path, options = {}) {
-    return this.router.replace(path, options);
+  replace(target, options = {}) {
+    return this.router.replace(target, options);
   }
 
-  destroy() {
-    this.router.destroy();
+  async destroy() {
+    await this.router.destroy();
     this.root.__glasskitApp = null;
     if (this.root.__iosApp === this) this.root.__iosApp = null;
     this.initialized = false;
