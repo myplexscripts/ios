@@ -13,13 +13,15 @@ function availableStorage(storage) {
 export class GlassKitStorage {
   constructor(options = {}) {
     this.namespace = options.namespace || 'glasskit';
-    this.storage = availableStorage(options.storage ?? globalThis.localStorage);
+    let selected = options.storage;
+    if (selected == null) {
+      try { selected = globalThis.localStorage; } catch { selected = null; }
+    }
+    this.storage = availableStorage(selected);
     this.memory = new Map();
   }
 
-  key(name) {
-    return `${this.namespace}:${name}`;
-  }
+  key(name) { return `${this.namespace}:${name}`; }
 
   get(name, fallback = null) {
     const key = this.key(name);
@@ -62,6 +64,4 @@ export class GlassKitStorage {
   }
 }
 
-export function createStorage(options = {}) {
-  return new GlassKitStorage(options);
-}
+export function createStorage(options = {}) { return new GlassKitStorage(options); }
