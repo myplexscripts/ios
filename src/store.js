@@ -28,6 +28,13 @@ export class GlassKitStore {
     return value;
   }
 
+  update(key, updater) {
+    if (typeof updater !== 'function') throw new TypeError('GlassKitStore updater must be a function');
+    const value = updater(this.state[key], this.state);
+    this.state[key] = value;
+    return value;
+  }
+
   patch(values = {}) {
     Object.entries(values).forEach(([key, value]) => {
       this.state[key] = value;
