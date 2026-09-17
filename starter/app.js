@@ -1,4 +1,7 @@
-import { GlassKitApp } from './framework/framework.js';
+const root = document.querySelector('[data-glasskit-app]');
+root?.removeAttribute('data-ios-app');
+
+const { GlassKitApp } = await import('./framework/framework.js');
 
 export const app = new GlassKitApp({
   root: '[data-glasskit-app]',
