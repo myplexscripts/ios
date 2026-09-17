@@ -15,11 +15,15 @@ starter/   standalone GlassKit app template
 1. Copy `starter/` into the new project.
 2. Replace `App Name`, routes, tab names and placeholder content.
 3. Keep app-specific CSS in `app.css`.
-4. Keep app-specific behaviour and route declarations in `app.js`.
+4. Keep app-specific behaviour, routed components and route declarations in the app layer.
 5. Leave `framework/` intact unless you are intentionally syncing a newer GlassKit runtime.
 6. Use `demo/` only as the component reference.
 
-A new app already has `GlassKitApp`, `GlassKitRouter`, `GlassKitStore`, URL-aware navigation, route parameters, lifecycle events, tabs, push navigation, swipe back, sheets, menus, adaptive layouts, safe areas, accessibility, Lucide icons, semantic colours, typography and concentric radii.
+A new app already has `GlassKitApp`, Router 2.0, `GlassKitStore`, routed components, lazy component loading, named routes, route parameters, guards, lifecycle events, scroll restoration, tabs, push navigation, swipe back, sheets, menus, adaptive layouts, safe areas, accessibility, Lucide icons, semantic colours, typography and concentric radii.
+
+The starter demonstrates the newer architecture directly: Library items open a `defineComponent()` screen that GlassKitRouter creates at runtime. That destination does not need to exist in `index.html` ahead of time.
+
+See `COMPONENTS_AND_ROUTING.md` for the routed component API.
 
 To preview it:
 
