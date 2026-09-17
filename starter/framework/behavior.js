@@ -1,3 +1,6 @@
+const boundScrolls = new WeakSet();
+const observers = new WeakMap();
+
 function compactLargeTitleThreshold(scroll, panel) {
   const title = panel?.querySelector('.ios-content > .ios-large-title:first-child');
   if (!title) return 28;
@@ -20,7 +23,7 @@ function syncNavigationState(scroll) {
 }
 
 function closeTransientMenus(root) {
-  const app = root.__iosApp;
+  const app = root.__glasskitApp || root.__iosApp;
   if (app?.closeMenus) {
     app.closeMenus();
     return;
@@ -34,28 +37,50 @@ function closeTransientMenus(root) {
   });
 }
 
-export function initIOSBehaviorRefinements(root = document.querySelector('[data-ios-app]')) {
-  if (!root || root.dataset.iosBehaviorRefinements === 'true') return root;
-  root.dataset.iosBehaviorRefinements = 'true';
-
-  root.querySelectorAll('.ios-scroll').forEach(scroll => {
-    const onScroll = () => {
-      syncNavigationState(scroll);
-      if (document.querySelector('.ios-menu.is-open')) closeTransientMenus(root);
-    };
-    scroll.addEventListener('scroll', onScroll, { passive: true });
+function bindScroll(root, scroll) {
+  if (boundScrolls.has(scroll)) return;
+  boundScrolls.add(scroll);
+  const onScroll = () => {
     syncNavigationState(scroll);
-  });
+    if (document.querySelector('.ios-menu.is-open')) closeTransientMenus(root);
+  };
+  scroll.addEventListener('scroll', onScroll, { passive: true });
+  syncNavigationState(scroll);
+}
 
-  const closeForViewportChange = () => closeTransientMenus(root);
-  window.addEventListener('resize', closeForViewportChange, { passive: true });
-  window.addEventListener('orientationchange', closeForViewportChange, { passive: true });
+export function enhanceIOSBehavior(root, scope = root) {
+  if (!root || !scope) return root;
+  if (scope.matches?.('.ios-scroll')) bindScroll(root, scope);
+  scope.querySelectorAll?.('.ios-scroll').forEach(scroll => bindScroll(root, scroll));
+  return root;
+}
+
+export function initIOSBehaviorRefinements(root = document.querySelector('[data-glasskit-app], [data-ios-app]')) {
+  if (!root) return root;
+  enhanceIOSBehavior(root, root);
+
+  if (root.dataset.iosBehaviorRefinements !== 'true') {
+    root.dataset.iosBehaviorRefinements = 'true';
+    const closeForViewportChange = () => closeTransientMenus(root);
+    window.addEventListener('resize', closeForViewportChange, { passive: true });
+    window.addEventListener('orientationchange', closeForViewportChange, { passive: true });
+  }
+
+  if (!observers.has(root)) {
+    const observer = new MutationObserver(records => {
+      records.forEach(record => record.addedNodes.forEach(node => {
+        if (node instanceof Element) enhanceIOSBehavior(root, node);
+      }));
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    observers.set(root, observer);
+  }
 
   return root;
 }
 
 function autoInit() {
-  document.querySelectorAll('[data-ios-app]').forEach(root => initIOSBehaviorRefinements(root));
+  document.querySelectorAll('[data-glasskit-app], [data-ios-app]').forEach(root => initIOSBehaviorRefinements(root));
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoInit, { once: true });
