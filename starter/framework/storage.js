@@ -22,20 +22,33 @@ export class GlassKitStorage {
   }
 
   key(name) { return `${this.namespace}:${name}`; }
+
   get(name, fallback = null) {
     const key = this.key(name);
     const raw = this.storage ? this.storage.getItem(key) : this.memory.get(key);
     if (raw == null) return fallback;
     try { return JSON.parse(raw); } catch { return fallback; }
   }
+
   set(name, value) {
     const key = this.key(name);
     const raw = JSON.stringify(value);
-    if (this.storage) this.storage.setItem(key, raw); else this.memory.set(key, raw);
+    if (this.storage) this.storage.setItem(key, raw);
+    else this.memory.set(key, raw);
     return value;
   }
-  remove(name) { const key = this.key(name); if (this.storage) this.storage.removeItem(key); else this.memory.delete(key); }
-  has(name) { const key = this.key(name); return this.storage ? this.storage.getItem(key) != null : this.memory.has(key); }
+
+  remove(name) {
+    const key = this.key(name);
+    if (this.storage) this.storage.removeItem(key);
+    else this.memory.delete(key);
+  }
+
+  has(name) {
+    const key = this.key(name);
+    return this.storage ? this.storage.getItem(key) != null : this.memory.has(key);
+  }
+
   clear() {
     const prefix = `${this.namespace}:`;
     if (this.storage) {
