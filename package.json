@@ -33,6 +33,7 @@
     "starter",
     "README.md",
     "START_HERE.md",
+    "COMPONENTS_AND_ROUTING.md",
     "HIG_AUDIT.md"
   ],
   "scripts": {
