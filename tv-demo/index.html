@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050506">
+  <title>TVKit Streaming UI</title>
+  <link rel="stylesheet" href="../src/tvkit.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main class="tv-app" data-tv-app data-sidebar-expanded="false">
+    <aside class="tv-sidebar" aria-label="Primary navigation">
+      <button class="tv-profile" type="button" data-tv-profile-picker data-tv-focusable aria-label="Choose profile">
+        <span class="tv-profile__avatar" data-profile-avatar>D</span>
+        <span class="tv-profile__name" data-profile-name>David</span>
+      </button>
+      <nav class="tv-sidebar__items">
+        <button class="tv-nav-item" type="button" data-tv-route="/search" data-tv-focusable><span data-ios-symbol="search"></span><span class="tv-sidebar__label">Search</span></button>
+        <button class="tv-nav-item" type="button" data-tv-route="/home" data-tv-focusable><span data-ios-symbol="house"></span><span class="tv-sidebar__label">Home</span></button>
+        <button class="tv-nav-item" type="button" data-tv-route="/tvplus" data-tv-focusable><span data-ios-symbol="play"></span><span class="tv-sidebar__label">TV+</span></button>
+        <button class="tv-nav-item" type="button" data-tv-route="/sports" data-tv-focusable><span data-ios-symbol="trophy"></span><span class="tv-sidebar__label">Sports</span></button>
+        <button class="tv-nav-item" type="button" data-tv-route="/store" data-tv-focusable><span data-ios-symbol="shopping-bag"></span><span class="tv-sidebar__label">Store</span></button>
+        <button class="tv-nav-item" type="button" data-tv-route="/library" data-tv-focusable><span data-ios-symbol="library"></span><span class="tv-sidebar__label">Library</span></button>
+        <div class="tv-sidebar__section">Channels & Apps</div>
+        <button class="tv-nav-item" type="button" data-tv-focusable data-channel="Stream One"><span data-ios-symbol="circle-play"></span><span class="tv-sidebar__label">Stream One</span></button>
+        <button class="tv-nav-item" type="button" data-tv-focusable data-channel="Cinema Max"><span data-ios-symbol="clapperboard"></span><span class="tv-sidebar__label">Cinema Max</span></button>
+      </nav>
+      <div class="tv-sidebar__footer">
+        <button class="tv-nav-item" type="button" data-tv-menu-trigger="settings" data-tv-focusable><span data-ios-symbol="settings"></span><span class="tv-sidebar__label">Settings</span></button>
+      </div>
+    </aside>
+
+    <div class="tv-topbar">
+      <div class="tv-glass">
+        <button class="tv-icon-button" type="button" data-tv-menu-trigger="quick" data-tv-focusable aria-label="More"><span data-ios-symbol="ellipsis"></span></button>
+      </div>
+    </div>
+
+    <div class="tv-stage"></div>
+
+    <div class="tv-menu-layer" aria-hidden="true">
+      <div class="tv-menu" data-tv-menu="quick" hidden>
+        <button class="tv-menu__item" type="button" data-menu-action="profiles" data-tv-focusable><span>Switch Profile</span><span data-ios-symbol="user-round"></span></button>
+        <button class="tv-menu__item" type="button" data-menu-action="watchlist" data-tv-focusable><span>View Watchlist</span><span data-ios-symbol="bookmark"></span></button>
+        <div class="tv-menu__separator"></div>
+        <button class="tv-menu__item" type="button" data-menu-action="settings" data-tv-focusable><span>Settings</span><span data-ios-symbol="settings"></span></button>
+      </div>
+      <div class="tv-menu" data-tv-menu="settings" hidden>
+        <button class="tv-menu__item" type="button" data-menu-action="autoplay" data-tv-focusable><span>Autoplay Previews</span><span data-ios-symbol="check"></span></button>
+        <button class="tv-menu__item" type="button" data-menu-action="quality" data-tv-focusable><span>Playback Quality</span><span>Auto</span></button>
+        <div class="tv-menu__separator"></div>
+        <button class="tv-menu__item" type="button" data-menu-action="profiles" data-tv-focusable><span>Profiles</span><span data-ios-symbol="users"></span></button>
+      </div>
+    </div>
+
+    <div class="tv-profile-picker" aria-hidden="true">
+      <section class="tv-profile-picker__card" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+        <h2 class="tv-profile-picker__title" id="profileTitle">Who is watching?</h2>
+        <div class="tv-profile-grid">
+          <button class="tv-profile-option" type="button" data-profile="David" data-initial="D" data-tv-focusable style="--profile-a:#be788a;--profile-b:#596287"><span class="tv-profile-option__avatar">D</span><span>David</span></button>
+          <button class="tv-profile-option" type="button" data-profile="Robbie" data-initial="R" data-tv-focusable style="--profile-a:#73a6b8;--profile-b:#4f6081"><span class="tv-profile-option__avatar">R</span><span>Robbie</span></button>
+          <button class="tv-profile-option" type="button" data-profile="Guest" data-initial="G" data-tv-focusable style="--profile-a:#9cb27d;--profile-b:#637152"><span class="tv-profile-option__avatar">G</span><span>Guest</span></button>
+          <button class="tv-profile-option" type="button" data-profile="Add" data-initial="+" data-tv-focusable style="--profile-a:#555b66;--profile-b:#33363d"><span class="tv-profile-option__avatar">+</span><span>Add</span></button>
+        </div>
+      </section>
+    </div>
+
+    <div class="tv-player" aria-hidden="true">
+      <div class="tv-player__art"></div>
+      <div class="tv-player__chrome">
+        <div class="tv-player__top">
+          <div><div class="tv-player__title" data-tv-player-title>Now Playing</div><div class="tv-player__subtitle" data-tv-player-subtitle></div></div>
+          <div class="tv-player__spacer"></div>
+          <button class="tv-icon-button" type="button" data-tv-dismiss data-tv-focusable aria-label="Close"><span data-ios-symbol="x"></span></button>
+        </div>
+        <div class="tv-player__progress"><span></span></div>
+        <div class="tv-player__controls">
+          <button class="tv-icon-button" type="button" data-tv-focusable aria-label="Rewind"><span data-ios-symbol="rotate-ccw"></span></button>
+          <button class="tv-icon-button tv-icon-button--primary" type="button" data-tv-player-primary data-tv-focusable aria-label="Pause"><span data-ios-symbol="pause"></span></button>
+          <button class="tv-icon-button" type="button" data-tv-focusable aria-label="Forward"><span data-ios-symbol="rotate-cw"></span></button>
+          <button class="tv-icon-button" type="button" data-tv-focusable aria-label="Subtitles"><span data-ios-symbol="captions"></span></button>
+          <button class="tv-icon-button" type="button" data-tv-focusable aria-label="Audio"><span data-ios-symbol="audio-lines"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tv-toast" role="status" aria-live="polite"></div>
+  </main>
+</body>
+</html>
